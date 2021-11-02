@@ -50,7 +50,6 @@ Computing barcodes for the selected alpha carbon structures.
 
 ```{r}
 barcodes_multi <- compute_homology_multi(alpha_carbs) #This function computes the barcodes for the 
-
 ```
 
 You can also compute the barcode of an individual structure using this function.
@@ -60,13 +59,28 @@ barcode_A <- compute_homology(alpha_carbs[[1]])
 
 barcode_B <- compute_homology(alpha_carbs[[2]])
 
+barcode_B_no_cero <- barcode_B[!barcode_B[,"dimension"] == 0,]
+
+barcode_B_no_one <- barcode_B[!barcode_B[,"dimension"] == 1,]
+
+barcode_B_no_two <- barcode_B[!barcode_B[,"dimension"] == 2,]
+
+barcode_B_no_one_two <- barcode_B[!barcode_B[,"dimension"] %in% c(1,2),]
+
+barcode_B_no_one_two_pseudo <- add_pseudo_barcode(barcode_B_no_one_two)
+
+as.factor(barcode_A[,"dimension"])
+
 compute_sim_barcode_pair(barcode_A,barcode_A)
 
+barcode_plot <- plot_barcodes(as.matrix(barcode_B_no_one_two_pseudo)
+)
 
+class(barcode_A)
+as.matrix(barcode_B_no_one_two_pseudo)
 
-barcode_plot <- plot_barcodes(barcode_individual)
-
-dimensions_plot <- plot_dimensions(barcode_individual)
+dimensions_plot <- plot_dimensions(as.matrix(barcode_B_no_one_two_pseudo)
+)
 
 cowplot::plot_grid(barcode_plot,dimensions_plot)
 dev.off()

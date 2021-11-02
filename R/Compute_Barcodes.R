@@ -76,5 +76,40 @@ compute_homology_multi <- function(alpha_multi,dimension_betti = 2){
   return(barcodes_multi)
 }
 
-#add_pseudo_barcode <- function(barcode)
+
+#' add_pseudo_barcode
+#'
+#' This function adds a pseudobarcode to each dimension of the generated barcode.
+#'
+#' @param barcode a barcode obtained from the compute_barcode or compute_barcode_multi functions
+#'
+#' @return returns a matrix with a barcode for which a pseudobarcoded has been added to each demiension.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' add_pseudo_barcode(barcode)
+#' }
+add_pseudo_barcode <- function(barcode){
+  splited_barcode <- split(data.frame(barcode),as.factor(as.character(barcode[,"dimension"])))
+  lacking_dimensions <- c(0,1,2)[!c(0,1,2) %in% unique(barcode[,"dimension"])]
+  list_out <- list()
+  counter <- 1
+  counter_added <- 1
+  for(i in 1:3){
+    print(i)
+    if((i -1) %in% lacking_dimensions){
+      line_add_lack <- c(i-1,0,0.5)
+      list_out[[counter]] <- line_add_lack
+      counter <- counter + 1
+    }else{
+      df_add <- rbind(c(i-1,0,0.5),splited_barcode[[counter_added]])
+      list_out[[counter]] <- df_add
+      counter <- counter + 1
+      counter_added <- counter_added + 1
+    }
+  }
+  barcode_pseudo <- base::do.call("rbind",list_out)
+  return(barcode_pseudo)
+}
 
