@@ -12,6 +12,9 @@ RoxygenNote: 7.1.2
 Imports: 
     base,
     bio3d,
+    cowplot,
+    ggplot2,
+    gridExtra,
     stats,
     TDAstats
 Suggests: 

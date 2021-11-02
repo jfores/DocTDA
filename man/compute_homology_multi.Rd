@@ -7,7 +7,9 @@
 compute_homology_multi(alpha_multi, dimension_betti = 2)
 }
 \arguments{
-\item{alpha_multi}{}
+\item{alpha_multi}{A list containing the matrices storing the alpha carbon possitions for different structures.}
+
+\item{dimension_betti}{Max Betti dimension to compute.}
 }
 \value{
 returns a lists with the barcodes of the multiple point cloud data

@@ -46,4 +46,32 @@ Compute max distances for each alpha carbon coordinate matrix.
 max_distances <- compute_max_d_multi(alpha_carbs)
 ```
 
+Computing barcodes for the selected alpha carbon structures.
+
+```{r}
+barcodes_multi <- compute_homology_multi(alpha_carbs) #This function computes the barcodes for the 
+```
+
+You can also compute the barcode of an individual structure using this function.
+
+```{r}
+barcode_individual <- compute_homology(alpha_carbs[[1]])
+
+barcode_plot <- plot_barcode(barcode_individual)
+
+dimensions_plot <- plot_dimensions(barcode_individual)
+
+plot_grid(barcode_plot,dimensions_plot)
+```
+
+
+
+
+```{r}
+seq_to_compute <- seq(from = 0, to = max(barcode_individual[,2:3])+5,by = 0.1)
+compute_pbf_for_curve(vec_vals = seq_to_compute,barcode = barcode_individual,dim_betti = 0)
+
+#compute_pbf_for_curve()
+```
+
 

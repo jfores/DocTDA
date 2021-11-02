@@ -60,7 +60,8 @@ compute_homology <- function(alpha_coord,dimension_betti = 2){
 
 #' Computes homology for multiple alfa carbon coordinate matrices stored into a list.
 #'
-#' @param alpha_multi
+#' @param alpha_multi A list containing the matrices storing the alpha carbon possitions for different structures.
+#' @param dimension_betti Max Betti dimension to compute.
 #'
 #' @return returns a lists with the barcodes of the multiple point cloud data
 #' @export
