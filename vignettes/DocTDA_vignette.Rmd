@@ -1,0 +1,49 @@
+---
+title: "DocTDA_vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{DocTDA_vignette}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(DocTDA)
+```
+
+Download de structures of five proteins of the Globin family derived from five different species. 
+The following commands could be used to download this structures directly from the Protein Data Bank. 
+Note that we only need to provide a list of PDB identifiers to the function and a pathways to the storing folder to download them.
+```{r,eval=FALSE}
+globin_structures <- c("3RGK","1YMB","1MBO","1LHS","2NRL") #Select the structures you want to work with.
+bio3d::get.pdb(globin_structures,path = "./Path_To_Folder" ) #Download the pdb files for each structure in the folder specified.
+paths_to_str <- dir("./Path_To_Folder",full.names = T) #Create a vector with the absolute pathws to each downloaded structure.
+structures <- read_multi_pdb(paths_to_str) #Reads all ped structures into R's environment.
+```
+
+Alternatively we will load the same structures stored as data in our package. We will extract the alpha carbon coordinates of each structure on the list. 
+
+```{r}
+data("structures") #load the globin strucutures.
+
+class(structures$`1LHS`)
+
+alpha_carbs <- extract_multiple_alpha(structures) #Produces a new list with the coordinates for the alpha carbons of the structures included in the previous list.
+```
+
+Compute max distances for each alpha carbon coordinate matrix.
+
+```{r}
+max_distances <- compute_max_d_multi(alpha_carbs)
+```
+
+
