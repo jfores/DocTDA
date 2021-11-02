@@ -75,3 +75,6 @@ compute_homology_multi <- function(alpha_multi,dimension_betti = 2){
   names(barcodes_multi) <- names(alpha_multi)
   return(barcodes_multi)
 }
+
+#add_pseudo_barcode <- function(barcode)
+

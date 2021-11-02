@@ -17,3 +17,8 @@ Returns a plot of the barcodes and the Persistent Betti Functions.
 \description{
 Function that plots the barcode and the PBFs for a specific barcode.
 }
+\examples{
+\dontrun{
+plot_dimensions(barcode_df,0.1)
+}
+}
