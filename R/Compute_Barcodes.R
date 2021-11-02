@@ -91,7 +91,7 @@ compute_homology_multi <- function(alpha_multi,dimension_betti = 2){
 #' add_pseudo_barcode(barcode)
 #' }
 add_pseudo_barcode <- function(barcode){
-  splited_barcode <- split(data.frame(barcode),as.factor(as.character(barcode[,"dimension"])))
+  splited_barcode <- base::split(data.frame(barcode),as.factor(as.character(barcode[,"dimension"])))
   lacking_dimensions <- c(0,1,2)[!c(0,1,2) %in% unique(barcode[,"dimension"])]
   list_out <- list()
   counter <- 1
@@ -103,13 +103,13 @@ add_pseudo_barcode <- function(barcode){
       list_out[[counter]] <- line_add_lack
       counter <- counter + 1
     }else{
-      df_add <- rbind(c(i-1,0,0.5),splited_barcode[[counter_added]])
+      df_add <- base::rbind(c(i-1,0,0.5),splited_barcode[[counter_added]])
       list_out[[counter]] <- df_add
       counter <- counter + 1
       counter_added <- counter_added + 1
     }
   }
-  barcode_pseudo <- base::do.call("rbind",list_out)
+  barcode_pseudo <- as.matrix(base::do.call("rbind",list_out))
   return(barcode_pseudo)
 }
 
