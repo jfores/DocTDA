@@ -113,3 +113,4 @@ add_pseudo_barcode <- function(barcode){
   return(barcode_pseudo)
 }
 
+#New functions.
