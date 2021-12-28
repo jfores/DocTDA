@@ -18,14 +18,14 @@ extract_DrugBank_data <- function(path_to_drugbank_xml,path_to_data,path_to_unip
   drugs <- dbparser::drugs()
   drugs_general_information <- drugs$general_information
   names(drugs_general_information)[1] <- "DB_ID"
-  save(file = paste(path_to_data,"/Database/Drugs.Rda",sep=""),drugs)
+  save(file = paste(path_to_data,"/Drugs.Rda",sep=""),drugs)
   drug_groups <- dbparser::drug_groups()
-  save(file = paste(path_to_data,"/Database/drug_groups.Rda",sep=""),drug_groups)
+  save(file = paste(path_to_data,"/drug_groups.Rda",sep=""),drug_groups)
   db_targets <- dbparser::targets()
-  save(file = paste(path_to_data,"/Database/db_targets.Rda",sep=""),db_targets)
+  save(file = paste(path_to_data,"/db_targets.Rda",sep=""),db_targets)
   names(db_targets)[1] <- "Protein_ID_2"
   targets_polypeptides_db <- dbparser::targets_polypeptides()
-  save(file = paste(path_to_data,"/Database/targets_polypeptides_db.Rda",sep=""),targets_polypeptides_db)
+  save(file = paste(path_to_data,"/targets_polypeptides_db.Rda",sep=""),targets_polypeptides_db)
   names(targets_polypeptides_db)[1] <- "Protein_ID"
   names(targets_polypeptides_db)[20] <- "Protein_ID_2"
   joined_one <- dplyr::left_join(db_targets,targets_polypeptides_db,by = "Protein_ID_2")
@@ -40,7 +40,7 @@ extract_DrugBank_data <- function(path_to_drugbank_xml,path_to_data,path_to_unip
   names(uniprot_to_pdb)[1] <- "Protein_ID"
   joined_four <- dplyr::left_join(joined_trhee,uniprot_to_pdb,by = "Protein_ID")
   joined_four <- joined_four[!is.na(joined_four$PDB),]
-  save(file = paste(paht_to_folder,"/Database/joined_four.Rda",sep=""),joined_four)
+  save(file = paste(paht_to_folder,"/joined_four.Rda",sep=""),joined_four)
 
 }
 
