@@ -21,7 +21,8 @@ extract_DrugBank_data <- function(path_to_drugbank_xml,path_to_data,path_to_unip
   bool_B <- paste(path_to_data,"/drug_groups.Rda",sep="") %in% dir(path_to_data,full.names = T)
   bool_C <- paste(path_to_data,"/db_targets.Rda",sep="") %in% dir(path_to_data,full.names = T)
   bool_D <- paste(path_to_data,"/targets_polypeptides_db.Rda",sep="") %in% dir(path_to_data,full.names = T)
-  if(!(bool_A & bool_B & bool_C & bool_D)){
+  bool_E <- paste(path_to_data,"/drugs_general_information.Rda",sep="") %in% dir(path_to_data,full.names = T)
+  if(!(bool_A & bool_B & bool_C & bool_D & bool_E)){
     if(verbose){
       print("Parsing drugbank...")
     }
@@ -30,6 +31,7 @@ extract_DrugBank_data <- function(path_to_drugbank_xml,path_to_data,path_to_unip
     drugs_general_information <- drugs$general_information
     names(drugs_general_information)[1] <- "DB_ID"
     save(file = paste(path_to_data,"/Drugs.Rda",sep=""),drugs)
+    save(file = paste(path_to_data,"/drugs_general_information.Rda",sep=""),drugs_general_information)
     drug_groups <- dbparser::drug_groups()
     save(file = paste(path_to_data,"/drug_groups.Rda",sep=""),drug_groups)
     db_targets <- dbparser::targets()
@@ -45,6 +47,7 @@ extract_DrugBank_data <- function(path_to_drugbank_xml,path_to_data,path_to_unip
     drug_groups <- get(load(file = paste(path_to_data,"/drug_groups.Rda",sep="")))
     db_targets <- get(load(file = paste(path_to_data,"/db_targets.Rda",sep="")))
     targets_polypeptides_db <- get(load(file = paste(path_to_data,"/targets_polypeptides_db.Rda",sep="")))
+    drugs_general_information <- get(load(file = paste(path_to_data,"/drugs_general_information.Rda",sep="")))
   }
   print(names(targets_polypeptides_db)[1])
   print(names(targets_polypeptides_db)[20])
