@@ -45,7 +45,9 @@ extract_DrugBank_data <- function(path_to_drugbank_xml,path_to_data,path_to_unip
     drug_groups <- get(load(file = paste(path_to_data,"/drug_groups.Rda",sep="")))
     db_targets <- get(load(file = paste(path_to_data,"/db_targets.Rda",sep="")))
     targets_polypeptides_db <- get(load(file = paste(path_to_data,"/targets_polypeptides_db.Rda",sep="")))
-    }
+  }
+  print(names(targets_polypeptides_db)[1])
+  print(names(targets_polypeptides_db)[20])
   names(targets_polypeptides_db)[1] <- "Protein_ID"
   names(targets_polypeptides_db)[20] <- "Protein_ID_2"
   joined_one <- dplyr::left_join(db_targets,targets_polypeptides_db,by = "Protein_ID_2")
