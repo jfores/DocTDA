@@ -15,26 +15,32 @@
 #'
 extract_DrugBank_data <- function(path_to_drugbank_xml,path_to_data,path_to_uniprot_data,verbose = FALSE){
   if(verbose){
-    print("Parsing drugbank...")
+    print("Starting process...")
   }
-  db_xml <- dbparser::read_drugbank_xml_db(path_to_drugbank_xml)
   bool_A <- paste(path_to_data,"/Drugs.Rda",sep="") %in% dir(path_to_data,full.names = T)
   bool_B <- paste(path_to_data,"/drug_groups.Rda",sep="") %in% dir(path_to_data,full.names = T)
   bool_C <- paste(path_to_data,"/db_targets.Rda",sep="") %in% dir(path_to_data,full.names = T)
   bool_D <- paste(path_to_data,"/targets_polypeptides_db.Rda",sep="") %in% dir(path_to_data,full.names = T)
-  if(! (bool_A & bool_B & bool_C & bool_D)){
-  drugs <- dbparser::drugs()
-  drugs_general_information <- drugs$general_information
-  names(drugs_general_information)[1] <- "DB_ID"
-  save(file = paste(path_to_data,"/Drugs.Rda",sep=""),drugs)
-  drug_groups <- dbparser::drug_groups()
-  save(file = paste(path_to_data,"/drug_groups.Rda",sep=""),drug_groups)
-  db_targets <- dbparser::targets()
-  save(file = paste(path_to_data,"/db_targets.Rda",sep=""),db_targets)
-  names(db_targets)[1] <- "Protein_ID_2"
-  targets_polypeptides_db <- dbparser::targets_polypeptides()
-  save(file = paste(path_to_data,"/targets_polypeptides_db.Rda",sep=""),targets_polypeptides_db)
+  if(!(bool_A & bool_B & bool_C & bool_D)){
+    if(verbose){
+      print("Parsing drugbank...")
+    }
+    db_xml <- dbparser::read_drugbank_xml_db(path_to_drugbank_xml)
+    drugs <- dbparser::drugs()
+    drugs_general_information <- drugs$general_information
+    names(drugs_general_information)[1] <- "DB_ID"
+    save(file = paste(path_to_data,"/Drugs.Rda",sep=""),drugs)
+    drug_groups <- dbparser::drug_groups()
+    save(file = paste(path_to_data,"/drug_groups.Rda",sep=""),drug_groups)
+    db_targets <- dbparser::targets()
+    save(file = paste(path_to_data,"/db_targets.Rda",sep=""),db_targets)
+    names(db_targets)[1] <- "Protein_ID_2"
+    targets_polypeptides_db <- dbparser::targets_polypeptides()
+    save(file = paste(path_to_data,"/targets_polypeptides_db.Rda",sep=""),targets_polypeptides_db)
   }else{
+    if(verbose){
+      print("Loading data...")
+    }
     drugs <- get(load(file = paste(path_to_data,"/Drugs.Rda",sep="")))
     drug_groups <- get(load(file = paste(path_to_data,"/drug_groups.Rda",sep="")))
     db_targets <- get(load(file = paste(path_to_data,"/db_targets.Rda",sep="")))
@@ -51,10 +57,16 @@ extract_DrugBank_data <- function(path_to_drugbank_xml,path_to_data,path_to_unip
   joined_trhee <- dplyr::left_join(joined_two,joined_one,by = "DB_ID")
   joined_trhee <- joined_trhee[!is.na(joined_trhee$Protein_ID),]
   joined_trhee <- joined_trhee[,c("DB_ID","other_keys","type","name","description","group","Protein_ID","gene_name","Protein_ID_2","name.x","organism.x","known_action","general_function","specific_function","cellular_location","transmembrane_regions","signal_regions","theoretical_pi","molecular_weight","chromosome_location","amino_acid_sequence","amino_acid_format")]
+  if(verbose){
+    print("Getting pdb structures from uniprot mapping...")
+  }
   uniprot_to_pdb <- read.csv(path_to_uniprot_data,sep = "\t")
   names(uniprot_to_pdb)[9] <- "PDB"
   uniprot_to_pdb %>%   mutate(PDB = strsplit(as.character(PDB), ";")) %>%  unnest(PDB) -> uniprot_to_pdb
   names(uniprot_to_pdb)[1] <- "Protein_ID"
+  if(verbose){
+    print("Joining data...")
+  }
   joined_four <- dplyr::left_join(joined_trhee,uniprot_to_pdb,by = "Protein_ID")
   joined_four <- joined_four[!is.na(joined_four$PDB),]
   save(file = paste(paht_to_folder,"/joined_four.Rda",sep=""),joined_four)
