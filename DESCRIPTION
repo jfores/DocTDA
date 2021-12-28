@@ -13,10 +13,13 @@ Imports:
     base,
     bio3d,
     cowplot,
+    dbparser,
+    dplyr,
     ggplot2,
     gridExtra,
     stats,
-    TDAstats
+    TDAstats,
+    tidyr
 Suggests: 
     rmarkdown,
     knitr

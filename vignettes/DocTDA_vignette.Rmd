@@ -69,6 +69,9 @@ barcode_B_no_one_two <- barcode_B[!barcode_B[,"dimension"] %in% c(1,2),]
 
 barcode_B_no_one_two_pseudo <- add_pseudo_barcode(barcode_B_no_one_two)
 
+library(DocTDA)
+help(add_pseudo_barcode)
+
 as.factor(barcode_A[,"dimension"])
 
 compute_sim_barcode_pair(barcode_A,barcode_A)
