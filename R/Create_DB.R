@@ -33,8 +33,8 @@ extract_DrugBank_data <- function(path_to_drugbank_xml,path_to_data,path_to_unip
     drug_groups <- dbparser::drug_groups()
     save(file = paste(path_to_data,"/drug_groups.Rda",sep=""),drug_groups)
     db_targets <- dbparser::targets()
-    save(file = paste(path_to_data,"/db_targets.Rda",sep=""),db_targets)
     names(db_targets)[1] <- "Protein_ID_2"
+    save(file = paste(path_to_data,"/db_targets.Rda",sep=""),db_targets)
     targets_polypeptides_db <- dbparser::targets_polypeptides()
     save(file = paste(path_to_data,"/targets_polypeptides_db.Rda",sep=""),targets_polypeptides_db)
   }else{
@@ -48,6 +48,7 @@ extract_DrugBank_data <- function(path_to_drugbank_xml,path_to_data,path_to_unip
   }
   print(names(targets_polypeptides_db)[1])
   print(names(targets_polypeptides_db)[20])
+  names(db_targets)[1] <- "Protein_ID_2"
   names(targets_polypeptides_db)[1] <- "Protein_ID"
   names(targets_polypeptides_db)[20] <- "Protein_ID_2"
   print(names(db_targets))
