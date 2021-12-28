@@ -13,8 +13,16 @@
 #' extract_DrugBank_data(alpha_coord)
 #' }
 #'
-extract_DrugBank_data <- function(path_to_drugbank_xml,path_to_data,path_to_uniprot_data){
+extract_DrugBank_data <- function(path_to_drugbank_xml,path_to_data,path_to_uniprot_data,verbose = FALSE){
+  if(verbose){
+    print("Parsing drugbank...")
+  }
   db_xml <- dbparser::read_drugbank_xml_db(path_to_drugbank_xml)
+  bool_A <- paste(path_to_data,"/Drugs.Rda",sep="") %in% dir(path_to_data,full.names = T)
+  bool_B <- paste(path_to_data,"/drug_groups.Rda",sep="") %in% dir(path_to_data,full.names = T)
+  bool_C <- paste(path_to_data,"/db_targets.Rda",sep="") %in% dir(path_to_data,full.names = T)
+  bool_D <- paste(path_to_data,"/targets_polypeptides_db.Rda",sep="") %in% dir(path_to_data,full.names = T)
+  if(! (bool_A & bool_B & bool_C & bool_D)){
   drugs <- dbparser::drugs()
   drugs_general_information <- drugs$general_information
   names(drugs_general_information)[1] <- "DB_ID"
@@ -26,10 +34,19 @@ extract_DrugBank_data <- function(path_to_drugbank_xml,path_to_data,path_to_unip
   names(db_targets)[1] <- "Protein_ID_2"
   targets_polypeptides_db <- dbparser::targets_polypeptides()
   save(file = paste(path_to_data,"/targets_polypeptides_db.Rda",sep=""),targets_polypeptides_db)
+  }else{
+    drugs <- get(load(file = paste(path_to_data,"/Drugs.Rda",sep="")))
+    drug_groups <- get(load(file = paste(path_to_data,"/drug_groups.Rda",sep="")))
+    db_targets <- get(load(file = paste(path_to_data,"/db_targets.Rda",sep="")))
+    targets_polypeptides_db <- get(load(file = paste(path_to_data,"/targets_polypeptides_db.Rda",sep="")))
+    }
   names(targets_polypeptides_db)[1] <- "Protein_ID"
   names(targets_polypeptides_db)[20] <- "Protein_ID_2"
   joined_one <- dplyr::left_join(db_targets,targets_polypeptides_db,by = "Protein_ID_2")
   names(joined_one)[6] <- "DB_ID"
+  if(verbose){
+    print("Joinig data...")
+  }
   joined_two <- dplyr::left_join(drugs_general_information,drug_groups,by = "DB_ID")
   joined_trhee <- dplyr::left_join(joined_two,joined_one,by = "DB_ID")
   joined_trhee <- joined_trhee[!is.na(joined_trhee$Protein_ID),]
