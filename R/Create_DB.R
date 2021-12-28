@@ -58,6 +58,7 @@ extract_DrugBank_data <- function(path_to_drugbank_xml,path_to_data,path_to_unip
   if(verbose){
     print("Joinig data...")
   }
+  names(drug_groups)[2] <- "DB_ID"
   joined_two <- dplyr::left_join(drugs_general_information,drug_groups,by = "DB_ID")
   joined_trhee <- dplyr::left_join(joined_two,joined_one,by = "DB_ID")
   joined_trhee <- joined_trhee[!is.na(joined_trhee$Protein_ID),]

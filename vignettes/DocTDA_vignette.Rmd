@@ -99,4 +99,3 @@ compute_pbf_for_curve(vec_vals = seq_to_compute,barcode = barcode_individual,dim
 #compute_pbf_for_curve()
 ```
 
-
