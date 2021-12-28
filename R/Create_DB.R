@@ -50,6 +50,8 @@ extract_DrugBank_data <- function(path_to_drugbank_xml,path_to_data,path_to_unip
   print(names(targets_polypeptides_db)[20])
   names(targets_polypeptides_db)[1] <- "Protein_ID"
   names(targets_polypeptides_db)[20] <- "Protein_ID_2"
+  print(names(db_targets))
+  print(names(targets_polypeptides_db))
   joined_one <- dplyr::left_join(db_targets,targets_polypeptides_db,by = "Protein_ID_2")
   names(joined_one)[6] <- "DB_ID"
   if(verbose){
