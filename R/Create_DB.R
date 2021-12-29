@@ -81,6 +81,40 @@ extract_DrugBank_data <- function(path_to_drugbank_xml,path_to_data,path_to_unip
   joined_four <- dplyr::left_join(joined_trhee,uniprot_to_pdb,by = "Protein_ID")
   joined_four <- joined_four[!is.na(joined_four$PDB),]
   save(file = paste(path_to_data,"/joined_four.Rda",sep=""),joined_four)
-
 }
 
+
+#' Download a large number of PDB files.
+#'
+#' @param pdb_ids_vec PDB ids for the structures to download.
+#' @param path_to_PDB_folder Path to the folder were the structures must be downloaded.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' download_pdb_structures(pdb_ids_vec,path_to_PDB_folder)
+#' }
+#'
+download_pdb_structures <- function(pdb_ids_vec,path_to_PDB_folder,verbose = FALSE){
+  pdb_ids_vec <- base::unique(pdb_ids_vec)
+  seq_to_download <- base::seq(1,base::length(pdb_ids_vec),1000)
+  for(i in 1:base::length(seq_to_download)){
+    if(i < base::length(seq_to_download)){
+      from_id <- seq_to_download[i]
+      to_id <-  seq_to_download[i+1] -1
+      if(verbose){
+        print(paste("Downloading structures from: ",from_id," to: ",to_id,".",sep=""))
+      }
+      bio3D::get.pdb(pdb_ids_vec[base::seq(from_id,to_id)],path = path_to_PDB_folder)
+    }else{
+      from_id <- seq_to_download[i]
+      to_id <-  base::length(pdb_ids_vec)
+      if(verbose){
+        print(paste("Downloading structures from: ",from_id," to: ",to_id,".",sep=""))
+      }
+      bio3D::get.pdb(pdb_ids_vec[base::seq(from_id,to_id)],path = path_to_PDB_folder)
+    }
+  }
+}
