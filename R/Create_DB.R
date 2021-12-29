@@ -71,7 +71,9 @@ extract_DrugBank_data <- function(path_to_drugbank_xml,path_to_data,path_to_unip
   }
   uniprot_to_pdb <- read.csv(path_to_uniprot_data,sep = "\t")
   names(uniprot_to_pdb)[9] <- "PDB"
-  uniprot_to_pdb %>%   mutate(PDB = strsplit(as.character(PDB), ";")) %>%  unnest(PDB) -> uniprot_to_pdb
+  temp_A <- dplyr::mutate(uniprot_to_pdb,PDB = strsplit(as.character(PDB), ";"))
+  uniprot_to_pdb <- unnest(temp_A,PDB)
+  # %>%   mutate(PDB = strsplit(as.character(PDB), ";")) %>%  unnest(PDB) -> uniprot_to_pdb
   names(uniprot_to_pdb)[1] <- "Protein_ID"
   if(verbose){
     print("Joining data...")
