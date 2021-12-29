@@ -4,7 +4,12 @@
 \alias{extract_DrugBank_data}
 \title{Extract Information from DrugBank}
 \usage{
-extract_DrugBank_data(path_to_drugbank_xml, path_to_data, path_to_uniprot_data)
+extract_DrugBank_data(
+  path_to_drugbank_xml,
+  path_to_data,
+  path_to_uniprot_data,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{path_to_drugbank_xml}{Path to the file containing the xml format drugbank database.}
