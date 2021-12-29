@@ -99,3 +99,12 @@ compute_pbf_for_curve(vec_vals = seq_to_compute,barcode = barcode_individual,dim
 #compute_pbf_for_curve()
 ```
 
+
+```{r}
+#pdb_temp <- read.pdb("/home/jj/Desktop/DrugBank/SpikeProteinTest/6vxx.pdb")
+#pdb_temp$remark
+#test_clean <- get_bio_clean(pdb_temp,"/home/jj/Desktop/","6vxx")
+#warnings()
+#data_test <- read.pdb("/home/jj/Desktop/6vxx_bio_1_clean.pdb")
+```
+

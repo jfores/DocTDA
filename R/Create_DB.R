@@ -118,3 +118,38 @@ download_pdb_structures <- function(pdb_ids_vec,path_to_PDB_folder,verbose = FAL
     }
   }
 }
+
+
+#' Get and clean biological assemblies.
+#'
+#' @param pdb_object A pdb class object.
+#' @param directory_to_write Path to the directory where clean biological units should be written.
+#' @param structure_name Name of the original pdb strcuture.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' get_bio_clean(pdb_object,directory_to_write,structure_name)
+#' }
+#'
+get_bio_clean <- function(pdb_object,directory_to_write,structure_name){
+  if(is.null(pdb_object$remark)){
+    temp_clean <- bio3d::atom.select(pdb_object,"protein",value=TRUE)
+    temp_clean <- bio3d::clean.pdb(temp_clean,rm.lig = TRUE,rm.wat = TRUE,fix.aa = TRUE)
+    bio3d::write.pdb(temp,file = paste(temp,"/",structure_name,"_","bio_",1,"_clean.pdb",sep=""))
+  }
+  else{
+  biounit_list <- bio3d::biounit(pdb_object)
+  for(i in 1:length(biounit_list)){
+    temp_clean <- bio3d::atom.select(biounit_list[[i]],"protein",value=TRUE)
+    temp_clean <- bio3d::clean.pdb(temp_clean,rm.lig = TRUE,rm.wat = TRUE,fix.aa = TRUE)
+    biounit_list[[i]] <- temp_clean
+    bio3d::write.pdb(biounit_list[[i]],file = paste(directory_to_write,"/",structure_name,"_","bio_",i,"_clean.pdb",sep=""))
+  }
+  return(biounit_list)
+  }
+}
+
+
