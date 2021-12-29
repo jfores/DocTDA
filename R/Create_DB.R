@@ -107,14 +107,14 @@ download_pdb_structures <- function(pdb_ids_vec,path_to_PDB_folder,verbose = FAL
       if(verbose){
         print(paste("Downloading structures from: ",from_id," to: ",to_id,".",sep=""))
       }
-      bio3D::get.pdb(pdb_ids_vec[base::seq(from_id,to_id)],path = path_to_PDB_folder)
+      bio3d::get.pdb(pdb_ids_vec[base::seq(from_id,to_id)],path = path_to_PDB_folder)
     }else{
       from_id <- seq_to_download[i]
       to_id <-  base::length(pdb_ids_vec)
       if(verbose){
         print(paste("Downloading structures from: ",from_id," to: ",to_id,".",sep=""))
       }
-      bio3D::get.pdb(pdb_ids_vec[base::seq(from_id,to_id)],path = path_to_PDB_folder)
+      bio3d::get.pdb(pdb_ids_vec[base::seq(from_id,to_id)],path = path_to_PDB_folder)
     }
   }
 }
