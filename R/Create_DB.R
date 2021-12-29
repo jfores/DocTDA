@@ -80,7 +80,7 @@ extract_DrugBank_data <- function(path_to_drugbank_xml,path_to_data,path_to_unip
   }
   joined_four <- dplyr::left_join(joined_trhee,uniprot_to_pdb,by = "Protein_ID")
   joined_four <- joined_four[!is.na(joined_four$PDB),]
-  save(file = paste(paht_to_folder,"/joined_four.Rda",sep=""),joined_four)
+  save(file = paste(path_to_data,"/joined_four.Rda",sep=""),joined_four)
 
 }
 
