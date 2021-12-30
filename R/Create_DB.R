@@ -170,8 +170,8 @@ extract_and_clean_multi <- function(pdb_structures_paths,directory_to_write){
   print("Extracting biological assemblies and removing ligands, waters, and non-proteic atoms...")
   pb <- utils::txtProgressBar(min = 0, max = length(pdb_structures_paths))
   for(i in 1:length(pdb_structures_paths)){
-    try({
     utils::setTxtProgressBar(pb, i)
+    try({
     pdb_to_read <- pdb_structures_paths[i]
     structure_name <- strsplit(pdb_to_read,"\\/")[[1]][length(strsplit(pdb_to_read,"\\/")[[1]])]
     structure_name <- strsplit(structure_name,"\\.")[[1]][1]
@@ -179,4 +179,5 @@ extract_and_clean_multi <- function(pdb_structures_paths,directory_to_write){
     get_bio_clean(temp_pdb,directory_to_write,structure_name)
     })
   }
+  close(pb)
 }
