@@ -106,5 +106,8 @@ compute_pbf_for_curve(vec_vals = seq_to_compute,barcode = barcode_individual,dim
 #test_clean <- get_bio_clean(pdb_temp,"/home/jj/Desktop/","6vxx")
 #warnings()
 #data_test <- read.pdb("/home/jj/Desktop/6vxx_bio_1_clean.pdb")
+
+pdbs <- dir("/home/jj/Desktop/DrugBank/PDBs/",full.names = T)
+extract_and_clean_multi(pdbs,"/temp")
 ```
 

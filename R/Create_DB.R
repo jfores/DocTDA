@@ -138,7 +138,7 @@ get_bio_clean <- function(pdb_object,directory_to_write,structure_name){
   if(is.null(pdb_object$remark)){
     temp_clean <- bio3d::atom.select(pdb_object,"protein",value=TRUE)
     temp_clean <- bio3d::clean.pdb(temp_clean,rm.lig = TRUE,rm.wat = TRUE,fix.aa = TRUE)
-    bio3d::write.pdb(temp,file = paste(temp,"/",structure_name,"_","bio_",1,"_clean.pdb",sep=""))
+    bio3d::write.pdb(temp_clean,file = paste(directory_to_write,"/",structure_name,"_","bio_",1,"_clean.pdb",sep=""))
   }
   else{
   biounit_list <- bio3d::biounit(pdb_object)
@@ -147,9 +147,36 @@ get_bio_clean <- function(pdb_object,directory_to_write,structure_name){
     temp_clean <- bio3d::clean.pdb(temp_clean,rm.lig = TRUE,rm.wat = TRUE,fix.aa = TRUE)
     biounit_list[[i]] <- temp_clean
     bio3d::write.pdb(biounit_list[[i]],file = paste(directory_to_write,"/",structure_name,"_","bio_",i,"_clean.pdb",sep=""))
-  }
-  return(biounit_list)
+    }
   }
 }
 
-
+#' Extract Bio And clean
+#'
+#' Extracts biological assemblies from pdb structures and removes waters,
+#'
+#' @param pdb_structures_paths a vector containing the complete paths to the pdb structures.
+#' @param directory_to_write a string including the destination folder where clean biological assemblies must be stored.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' extract_and_clean_multi(pdb_structures_paths,directory_to_write)
+#' }
+#'
+extract_and_clean_multi <- function(pdb_structures_paths,directory_to_write){
+  print("Extracting biological assemblies and removing ligands, waters, and non-proteic atoms...")
+  pb <- utils::txtProgressBar(min = 0, max = length(pdb_structures_paths))
+  for(i in 1:length(pdb_structures_paths)){
+    try({
+    utils::setTxtProgressBar(pb, i)
+    pdb_to_read <- pdb_structures_paths[i]
+    structure_name <- strsplit(pdb_to_read,"\\/")[[1]][length(strsplit(pdb_to_read,"\\/")[[1]])]
+    structure_name <- strsplit(structure_name,"\\.")[[1]][1]
+    temp_pdb <- read.pdb(file = pdb_to_read)
+    get_bio_clean(temp_pdb,directory_to_write,structure_name)
+    })
+  }
+}

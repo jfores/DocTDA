@@ -20,7 +20,8 @@ Imports:
     magrittr,
     stats,
     TDAstats,
-    tidyr
+    tidyr,
+    utils
 Suggests: 
     rmarkdown,
     knitr
