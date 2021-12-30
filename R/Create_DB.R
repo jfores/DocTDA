@@ -153,7 +153,7 @@ get_bio_clean <- function(pdb_object,directory_to_write,structure_name){
 
 #' Extract Bio And clean
 #'
-#' Extracts biological assemblies from pdb structures and removes waters,
+#' Extracts biological assemblies from pdb structures and removes waters, ligans, and non-proteic atoms.
 #'
 #' @param pdb_structures_paths a vector containing the complete paths to the pdb structures.
 #' @param directory_to_write a string including the destination folder where clean biological assemblies must be stored.
@@ -175,7 +175,7 @@ extract_and_clean_multi <- function(pdb_structures_paths,directory_to_write){
     pdb_to_read <- pdb_structures_paths[i]
     structure_name <- strsplit(pdb_to_read,"\\/")[[1]][length(strsplit(pdb_to_read,"\\/")[[1]])]
     structure_name <- strsplit(structure_name,"\\.")[[1]][1]
-    temp_pdb <- read.pdb(file = pdb_to_read)
+    temp_pdb <- bio3d::read.pdb(file = pdb_to_read)
     get_bio_clean(temp_pdb,directory_to_write,structure_name)
     })
   }
