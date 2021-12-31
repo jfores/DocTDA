@@ -181,3 +181,41 @@ extract_and_clean_multi <- function(pdb_structures_paths,directory_to_write){
   }
   close(pb)
 }
+
+
+#' get_bio_assembly_information
+#'
+#' @param path_to_bio_ass Pathway to biological assemblies folder.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' get_bio_assembly_information(path_to_bio_ass)
+#' }
+#'
+get_bio_assembly_information <- function(path_to_bio_ass){
+  bio_ass_pahts <- dir(path_to_bio_ass,full.names = TRUE)
+  original_structure <- unlist(lapply(strsplit(unlist(lapply(strsplit(bio_ass_pahts,"\\/"),function(x)x[length(x)])),"_"),function(x)x[1]))
+  data_frame_structure_path <- data.frame(original_structure,bio_ass_pahts)
+  list_out <- list()
+  pb <- utils::txtProgressBar(min = 0, max = length(bio_ass_pahts), style = 3)
+  for(i in 1:nrow(data_frame_structure_path)){
+    utils::setTxtProgressBar(pb, i)
+    temp_pdb <- bio3d::read.pdb(data_frame_structure_path[i,2])
+    n_chains <- length(unique(temp_pdb$atom$chain))
+    name_chains <- paste(unique(temp_pdb$atom$chain),collapse = ", ")
+    n_alpha_carbons <- sum(temp_pdb$calpha)
+    n_alpha_carbons_by_chain <- paste(lapply(split(temp_pdb$atom[temp_pdb$calpha,],as.factor(temp_pdb$atom[temp_pdb$calpha,]$chain)),nrow),collapse = ", ")
+    list_out[[i]] <- c(n_alpha_carbons,n_chains,name_chains,n_alpha_carbons_by_chain)
+  }
+  close(pb)
+  data_frame_lengths <- base::do.call("rbind",list_out)
+  colnames(data_frame_lengths) <- c("n_alpha","n_chains","name_chains","leng_n_chains")
+  data_frame_paths_and_structures <- cbind(data_frame_structure_path,data_frame_lengths)
+  data_frame_paths_and_structures$PDB_BioAss <- gsub("_clean.pdb","",unlist(lapply(strsplit(data_frame_paths_and_structures$bio_ass_pahts,"\\/"),function(x) x[length(x)])))
+  data_frame_paths_and_structures$n_alpha <- as.numeric(data_frame_paths_and_structures$n_alpha)
+  colnames(data_frame_paths_and_structures)[1] <- "PDB"
+  return(data_frame_paths_and_structures)
+}

@@ -18,6 +18,7 @@ Imports:
     ggplot2,
     gridExtra,
     magrittr,
+    progress,
     stats,
     TDAstats,
     tidyr,

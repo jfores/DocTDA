@@ -15,7 +15,7 @@ extract_and_clean_multi(pdb_structures_paths, directory_to_write)
 
 }
 \description{
-Extracts biological assemblies from pdb structures and removes waters,
+Extracts biological assemblies from pdb structures and removes waters, ligans, and non-proteic atoms.
 }
 \examples{
 \dontrun{
