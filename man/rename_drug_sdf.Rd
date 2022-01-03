@@ -4,10 +4,12 @@
 \alias{rename_drug_sdf}
 \title{rename_drug_sdf}
 \usage{
-rename_drug_sdf(path_to_sdfs)
+rename_drug_sdf(path_to_sdfs, path_to_out)
 }
 \arguments{
 \item{path_to_sdfs}{Path to the location of sdf 3D drug structures.}
+
+\item{path_to_out}{Path were the new files must be written.}
 }
 \value{
 
