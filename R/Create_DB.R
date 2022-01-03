@@ -227,16 +227,30 @@ get_bio_assembly_information <- function(path_to_bio_ass){
 #' Renames and SDF file generated using the split_sdf.py script using its DrugBank ID.
 #'
 #' @param path_to_sdfs Path to the location of sdf 3D drug structures.
+#' @param path_to_out Path were the new files must be written.
 #'
 #' @return
 #' @export
 #'
 #' @examples
-rename_drug_sdf <- function(path_to_sdfs){
+rename_drug_sdf <- function(path_to_sdfs,path_to_out){
   dir_drug_3D <- dir(path_to_sdfs,full.names = T)
-  print(paste(path_to_sdfs,"3D structures.sdf",sep=""))
+  print(paste(path_to_sdfs,"/3D structures.sdf",sep=""))
   drug_files <- dir_drug_3D[grepl("3D.*sdf",dir_drug_3D)]
   print(table(grepl(paste(path_to_sdfs,"/3D structures.sdf",sep=""),drug_files)))
-  drug_files <- drug_files[!grepl(paste(path_to_sdfs,"3D structures.sdf",sep=""),drug_files)]
-
+  drug_files <- drug_files[!grepl(paste(path_to_sdfs,"/3D structures.sdf",sep=""),drug_files)]
+  drug_names <- list()
+  new_files <- c()
+  for(i in 1:length(drug_files)){
+    fileName = drug_files[i]
+    con=file(fileName,open="r")
+    line=readLines(con)
+    drug_name <- line[which(line == "> <DATABASE_ID>") + 1]
+    drug_name <- paste(drug_name,collapse = ", ")
+    drug_names[[i]] <- drug_name
+    close.connection(con)
+    new_file_name <- paste(path_to_out,"/",drug_name,".sdf",sep="")
+    new_files <- c(new_files,new_file_name)
+  }
+  return(new_files)
 }
