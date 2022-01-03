@@ -279,7 +279,7 @@ rename_drug_sdf <- function(path_to_sdfs,path_to_out){
 aux_function <- function(x){
   sampled <- sample(1:nrow(x),1)
   bio_sampled <- as.character(x[sampled,"PDB_BioAss"])
-  bool <- control_file_2$PDB_BioAss == bio_sampled
+  #bool <- control_file_2$PDB_BioAss == bio_sampled
   return(bio_sampled)
 }
 
