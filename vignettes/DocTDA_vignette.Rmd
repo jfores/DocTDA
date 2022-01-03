@@ -112,5 +112,16 @@ compute_pbf_for_curve(vec_vals = seq_to_compute,barcode = barcode_individual,dim
 library(DocTDA)
 paths_to_bio <- "/home/jj/Desktop/DrugBank/PDBs_Bio_Clean/"
 head(get_bio_assembly_information(paths_to_bio[1:10]))
+cf_2 <- get(load(file = "/home/jj/Desktop/DrugBank/Database/control_file_2.Rda"))
+cf_2 <- cf_2[1:10,]
+colnames(cf_2)
+test_par <- function(x){
+  df_temp <- data.frame(t(x))
+  return(df_temp)
+  }
+library(parallel)
+cl <- makeCluster(2)
+test <- parApply(cl,X = cf_2,1,test_par)
+View(test[[1]])
 ```
 

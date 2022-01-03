@@ -187,3 +187,55 @@ compute_bc_round <- function(x,round_n,dir_bc){
     })
   }
 }
+
+
+
+
+#' compute_bc_round_multi
+#'
+#' A multiple thread version of the previous function.
+#'
+#' @param x a dataframe with the whole database information.
+#' @param round_n the number of the round to be computed.
+#' @param dir_bc the directory where barcode files must be stored.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' compute_bc_round(x,round_n,dir_bc)
+#' }
+compute_bc_round_multi <- function(x,round_n,dir_bc){
+  x <- data.frame(t(x))
+  round_data <- x[x$Assigned_Round == round_n,,drop = F]
+  round_data_filt <- unique(data.frame(round_data[,c("n_alpha","bio_ass_pahts")],drop = F))
+  for(i in 1:nrow(round_data_filt)){
+    print(i)
+    try({
+      if(round_data_filt[i,1] <= 1000){
+        name_file <- round_data_filt[i,2]
+        root_file <- gsub("_clean.pdb","",strsplit(name_file,"\\/")[[1]][length(strsplit(name_file,"\\/")[[1]])])
+        if(sum(grepl(root_file,dir(dir_bc))) < 1){
+          pdb_temp <- bio3d::read.pdb(round_data_filt[i,2])
+          alpha_carbs <- extract_multiple_alpha(list(pdb_temp))
+          barcode <- compute_homology(alpha_carbs[[1]])
+          file_to_save <- paste(dir_bc,"/",root_file,".Rda",sep = "")
+          save(file = file_to_save,barcode)}
+      }else{
+        pdb_temp <- bio3d::read.pdb(round_data_filt[i,2])
+        list_of_chains <- extract_alpha_chains(pdb_temp)
+        name_file <- round_data_filt[i,2]
+        root_file <- gsub("_clean.pdb","",strsplit(name_file,"\\/")[[1]][length(strsplit(name_file,"\\/")[[1]])])
+        if(sum(grepl(root_file,dir(dir_bc))) < 1){
+          for(j in 1:length(list_of_chains)){
+            barcode <- compute_homology(list_of_chains[[j]])
+            file_to_save <- paste(dir_bc,"/",root_file,"_",names(list_of_chains)[j],".Rda",sep = "")
+            save(file = file_to_save,barcode)
+          }
+        }
+      }
+      gc()
+    })
+  }
+}
