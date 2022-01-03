@@ -253,5 +253,6 @@ rename_drug_sdf <- function(path_to_sdfs,path_to_out){
     new_files <- c(new_files,new_file_name)
   }
   df_return <- data.frame(drug_files,new_files)
+  file.rename(from = df_return$drug_files,to = df_return$new_files,overwrite = FALSE)
   return(df_return)
 }
