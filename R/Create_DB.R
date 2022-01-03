@@ -219,3 +219,23 @@ get_bio_assembly_information <- function(path_to_bio_ass){
   colnames(data_frame_paths_and_structures)[1] <- "PDB"
   return(data_frame_paths_and_structures)
 }
+
+
+
+#' rename_drug_sdf
+#'
+#' Renames and SDF file generated using the split_sdf.py script using its DrugBank ID.
+#'
+#' @param path_to_sdfs Path to the location of sdf 3D drug structures.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+rename_drug_sdf <- function(path_to_sdfs){
+  dir_drug_3D <- dir(path_to_sdfs,full.names = T)
+  drug_files <- dir_drug_3D[grepl("3D.*sdf",dir_drug_3D)]
+  print(table(grepl(paste(path_to_sdfs,"3D structures.sdf",sep=""),drug_files)))
+  drug_files <- drug_files[!grepl(paste(path_to_sdfs,"3D structures.sdf",sep=""),drug_files)]
+
+}
