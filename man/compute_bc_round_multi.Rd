@@ -4,14 +4,14 @@
 \alias{compute_bc_round_multi}
 \title{compute_bc_round_multi}
 \usage{
-compute_bc_round_multi(x, round_n, dir_bc)
+compute_bc_round_multi(x, dir_bc)
 }
 \arguments{
 \item{x}{a dataframe with the whole database information.}
 
-\item{round_n}{the number of the round to be computed.}
-
 \item{dir_bc}{the directory where barcode files must be stored.}
+
+\item{round_n}{the number of the round to be computed.}
 }
 \value{
 
@@ -21,6 +21,6 @@ A multiple thread version of the previous function.
 }
 \examples{
 \dontrun{
-compute_bc_round(x,round_n,dir_bc)
+compute_bc_round(x,dir_bc)
 }
 }
