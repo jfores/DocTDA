@@ -236,7 +236,7 @@ rename_drug_sdf <- function(path_to_sdfs){
   dir_drug_3D <- dir(path_to_sdfs,full.names = T)
   print(paste(path_to_sdfs,"3D structures.sdf",sep=""))
   drug_files <- dir_drug_3D[grepl("3D.*sdf",dir_drug_3D)]
-  print(table(grepl(paste(path_to_sdfs,"3D structures.sdf",sep=""),drug_files)))
+  print(table(grepl(paste(path_to_sdfs,"/3D structures.sdf",sep=""),drug_files)))
   drug_files <- drug_files[!grepl(paste(path_to_sdfs,"3D structures.sdf",sep=""),drug_files)]
 
 }
