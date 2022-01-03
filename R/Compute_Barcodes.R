@@ -155,6 +155,7 @@ extract_alpha_chains <- function(structure){
 #' compute_bc_round(x,round_n,dir_bc)
 #' }
 compute_bc_round <- function(x,round_n,dir_bc){
+  print(x)
   round_data <- x[x$Assigned_Round == round_n,]
   round_data_filt <- unique(data.frame(round_data[,c("n_alpha","bio_ass_pahts")]))
   for(i in 1:nrow(round_data_filt)){
