@@ -233,6 +233,10 @@ get_bio_assembly_information <- function(path_to_bio_ass){
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' rename_drug_sdf(path_to_sdfs,path_to_out)
+#' }
+#'
 rename_drug_sdf <- function(path_to_sdfs,path_to_out){
   dir_drug_3D <- dir(path_to_sdfs,full.names = T)
   print(paste(path_to_sdfs,"/3D structures.sdf",sep=""))
@@ -255,4 +259,64 @@ rename_drug_sdf <- function(path_to_sdfs,path_to_out){
   df_return <- data.frame(drug_files,new_files)
   file.rename(from = df_return$drug_files,to = df_return$new_files)
   return(df_return)
+}
+
+
+#' aux_func
+#'
+#' auxiliar function to carry out the random sampling to generate different project rounds.
+#'
+#' @param x a df with the same column structure than joined_5.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' aux_function(x)
+#' }
+#'
+aux_function <- function(x){
+  sampled <- sample(1:nrow(x),1)
+  bio_sampled <- as.character(x[sampled,"PDB_BioAss"])
+  bool <- control_file_2$PDB_BioAss == bio_sampled
+  return(bio_sampled)
+}
+
+
+#' assign_rounds_for_bc
+#'
+#' Generate randmly sampled round to carry out the project in different steps.
+#'
+#' @param path_to_joined_five Paht to the joined_five file.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' assign_rounds_for_bc(path_to_joined_five)
+#' }
+#'
+assign_rounds_for_bc <- function(path_to_joined_five){
+  joined_five <- get(load(file = path_to_joined_five))
+  control_file <- joined_five
+  control_file$BarCode_Computed <- rep("No",nrow(control_file))
+  control_file$Assigned_Round <- rep(NA,nrow(control_file))
+  control_file <- control_file[!is.na(control_file$PDB_BioAss),]
+  control_file_2 <- control_file
+  sampling_cont <- TRUE
+  counter_num <- 1
+  while(sampling_cont){
+    print(counter_num)
+    to_split <- control_file_2[is.na(control_file_2$Assigned_Round),]
+    splitted <- split(to_split,as.factor(to_split$Protein_ID))
+    temp_strucutres <- unlist(lapply(splitted,aux_function))
+    control_file_2[control_file_2$PDB_BioAss %in% temp_strucutres,"Assigned_Round"] <- counter_num
+    if(all(!is.na(control_file_2$Assigned_Round))){
+      sampling_cont <- FALSE
+    }
+    counter_num <- counter_num + 1
+  }
+  return(control_file_2)
 }

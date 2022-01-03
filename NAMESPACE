@@ -2,7 +2,9 @@
 
 export("%>%")
 export(add_pseudo_barcode)
+export(assign_rounds_for_bc)
 export(aux_for_extract_multiple_alpha)
+export(aux_function)
 export(compute_exponential_sum)
 export(compute_homology)
 export(compute_homology_multi)

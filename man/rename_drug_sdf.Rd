@@ -17,3 +17,9 @@ rename_drug_sdf(path_to_sdfs, path_to_out)
 \description{
 Renames and SDF file generated using the split_sdf.py script using its DrugBank ID.
 }
+\examples{
+\dontrun{
+rename_drug_sdf(path_to_sdfs,path_to_out)
+}
+
+}
