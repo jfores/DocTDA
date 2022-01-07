@@ -4,7 +4,7 @@
 \alias{create_vina_command}
 \title{create_vina_command}
 \usage{
-create_vina_command(x, y, z, w, exhaust)
+create_vina_command(x, y, z, w, exhaust = 8)
 }
 \arguments{
 \item{x}{Path to protein pdbqt.}
