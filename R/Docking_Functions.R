@@ -46,7 +46,7 @@ create_config_pdb <- function(x){
 create_vina_command <- function(x,y,z,w,exhaust = 8){
   temp_rec_one <- gsub("_clean.pdbqt","",strsplit(x,"\\/")[[1]][length(strsplit(x,"\\/")[[1]])])
   temp_lig_one <- gsub(".pdbqt","",strsplit(y,"\\/")[[1]][length(strsplit(y,"\\/")[[1]])])
-  out_file <- paste(z,temp_rec_one,"_AND_",temp_lig_one,".pdbqt",sep="")
+  out_file <- paste(z,"/",temp_rec_one,"_AND_",temp_lig_one,".pdbqt",sep="")
   temp_pdb_file <- w
   print(temp_pdb_file)
   temp_log <- gsub("pdbqt","log",out_file)
