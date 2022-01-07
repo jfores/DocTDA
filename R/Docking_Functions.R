@@ -47,17 +47,18 @@ create_vina_command <- function(x,y,z,w,exhaust = 8){
   temp_rec_one <- gsub("_clean.pdbqt","",strsplit(x,"\\/")[[1]][length(strsplit(x,"\\/")[[1]])])
   temp_lig_one <- gsub(".pdbqt","",strsplit(y,"\\/")[[1]][length(strsplit(y,"\\/")[[1]])])
   out_file <- paste(z,temp_rec_one,"_AND_",temp_lig_one,".pdbqt",sep="")
-  #temp_pdb_file <- gsub("pdbqt","pdb",strsplit(x,"\\/")[[1]][length(strsplit(x,"\\/")[[1]])])
-  #temp_pdb_file <- paste(w,temp_pdb_file,sep="")
   temp_pdb_file <- w
   print(temp_pdb_file)
   temp_log <- gsub("pdbqt","log",out_file)
-  print(temp_log)
-  print("Here...")
+  #print(temp_log)
+  #print("Here...")
   list_out <- create_config_pdb(temp_pdb_file)
-  print("Here 2...")
-  print(list_out)
+  #print("Here 2...")
+  #print(list_out)
   vina_command <- paste("vina --receptor ",x, " --ligand ",y," --out ",out_file, " --center_x ", round(list_out[[1]],digits = 2)," --center_y ",round(list_out[[2]],digits = 2)," --center_z ",round(list_out[[3]],digits = 2)," --size_x ", round(list_out[[4]],digits = 2)," --size_y ",round(list_out[[5]],digits = 2)," --size_z ",round(list_out[[6]],digits = 2)," --exhaustiveness ",exhaust," --log ",temp_log,sep="")
-  print(vina_command)
-  system(vina_command)
+  if(!(out_file %in% dir(z,full.names = TRUE))){
+    system(vina_command)
+
+  }
+  #print(vina_command)
 }
