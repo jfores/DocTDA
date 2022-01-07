@@ -17,7 +17,7 @@
 #'
 create_config_pdb <- function(x){
   pdb_readed <- bio3d::read.pdb(x)
-  require(bio3d)
+  elements <- bio3d::elements
   center_of_mass <- bio3d::com(pdb_readed)
   x_size <- range(pdb_readed$atom$x)[2] -range(pdb_readed$atom$x)[1]
   y_size <- range(pdb_readed$atom$y)[2] -range(pdb_readed$atom$y)[1]
@@ -43,7 +43,7 @@ create_config_pdb <- function(x){
 #' create_vina_command(x,y,z,w,exhaust)
 #' }
 #'
-create_vina_command <- function(x,y,z,w,exhaust){
+create_vina_command <- function(x,y,z,w,exhaust = 8){
   temp_rec_one <- gsub("_clean.pdbqt","",strsplit(x,"\\/")[[1]][length(strsplit(x,"\\/")[[1]])])
   temp_lig_one <- gsub(".pdbqt","",strsplit(y,"\\/")[[1]][length(strsplit(y,"\\/")[[1]])])
   out_file <- paste(z,temp_rec_one,"_AND_",temp_lig_one,".pdbqt",sep="")
