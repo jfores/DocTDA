@@ -125,3 +125,28 @@ test <- parApply(cl,X = cf_2,1,test_par)
 View(test[[1]])
 ```
 
+
+```{r}
+#rec <- "/home/jj/Desktop/DrugBank/PDBs_Bio_Clean/102L_bio_1_clean.pdb"
+#lig <- "/home/jj/Desktop/DrugBank/Drug_PDBQT/DB00118.pdbqt"
+#out_path <- "/home/jj/Desktop/DrugBank/Experiment_One/"
+#pdb_file <- "/home/jj/Desktop/DrugBank/PDBs_Bio_Clean/"
+
+#create_vina_command(rec,lig,out_path,pdb_file,exhaust = 8)
+
+
+
+#pdb_readed <- bio3d::read.pdb(rec)
+#bio3d::com
+#library(bio3d)
+#bio3d::elements
+#elements
+#center_of_mass <- com(pdb_readed)
+#rm("")
+
+x_size <- range(pdb_readed$atom$x)[2] -range(pdb_readed$atom$x)[1]
+y_size <- range(pdb_readed$atom$y)[2] -range(pdb_readed$atom$y)[1]
+z_size <- range(pdb_readed$atom$z)[2] -range(pdb_readed$atom$z)[1]
+
+```
+

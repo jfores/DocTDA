@@ -16,8 +16,8 @@
 #' }
 #'
 create_config_pdb <- function(x){
-  pdb_readed <- read.pdb(x)
-  center_of_mass <- com(pdb_readed)
+  pdb_readed <- bio3d::read.pdb(x)
+  center_of_mass <- bio3d::com(pdb_readed)
   x_size <- range(pdb_readed$atom$x)[2] -range(pdb_readed$atom$x)[1]
   y_size <- range(pdb_readed$atom$y)[2] -range(pdb_readed$atom$y)[1]
   z_size <- range(pdb_readed$atom$z)[2] -range(pdb_readed$atom$z)[1]
@@ -51,7 +51,9 @@ create_vina_command <- function(x,y,z,w,exhaust){
   print(temp_pdb_file)
   temp_log <- gsub("pdbqt","log",out_file)
   print(temp_log)
+  print("Here...")
   list_out <- create_config_pdb(temp_pdb_file)
+  print("Here 2...")
   print(list_out)
   vina_command <- paste("vina --receptor ",x, " --ligand ",y," --out ",out_file, " --center_x ", round(list_out[[1]],digits = 2)," --center_y ",round(list_out[[2]],digits = 2)," --center_z ",round(list_out[[3]],digits = 2)," --size_x ", round(list_out[[4]],digits = 2)," --size_y ",round(list_out[[5]],digits = 2)," --size_z ",round(list_out[[6]],digits = 2)," --exhaustiveness ",exhaust," --log ",temp_log,sep="")
   print(vina_command)
