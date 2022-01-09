@@ -85,6 +85,7 @@ create_vina_command <- function(x,y,z,w,exhaust = 8){
 #'
 compute_by_square <- function(bio_assay_pdbqt,drug_pdbqt_paths,output_path,bio_assay_paths,exhaust = 40,save_control_matrix_path,verbose = TRUE){
   if(file.exists( paste(save_control_matrix_path,"/control_matrix.Rda",sep=""))){
+    print(paste(save_control_matrix_path,"/control_matrix.Rda",sep=""))
     control_matrix <- get(load(file = paste(save_control_matrix_path,"/control_matrix.Rda",sep="")))
     row_count <- which(apply(control_matrix,1,sum) < ncol(control_matrix))[1]
     col_count <- which(control_matrix[row_count,] == FALSE)[1]

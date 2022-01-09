@@ -136,7 +136,7 @@ path_to_save_mat <- "/home/jj/Desktop/"
 rec_files <- dir(rec,full.names = TRUE)[1:50]
 lig_files <- dir(lig,full.names = TRUE)[1:100]
 pdb_files <- dir(pdb,full.names = TRUE)[1:50]
-out_path <- "/home/jj/Desktop/DrugBank/Experiment_One"
+out_path <- "/home/jj/Desktop/DrugBank/Experiment_One/Do"
 path_to_save_mat <- "/home/jj/Desktop/"
 
 ret_mat <- compute_by_square(bio_assay_pdbqt = rec_files,drug_pdbqt_paths = lig_files,output_path = out_path,bio_assay_paths =  pdb_files,exhaust = 8,save_control_matrix_path  = path_to_save_mat)
