@@ -106,7 +106,7 @@ compute_by_square <- function(bio_assay_pdbqt,drug_pdbqt_paths,output_path,bio_a
       print(paste("Col: ", col_count,sep = ""))
     }
     if((row_count * col_count) %% 100 == 0){
-      save(file = paste(save_control_matrix_path,"/control_matrix.Rda",sep=""))
+      save(file = paste(save_control_matrix_path,"/control_matrix.Rda",sep=""),control_matrix)
     }
     if(row_count == 1 & col_count == 1){
       try({
@@ -144,7 +144,7 @@ compute_by_square <- function(bio_assay_pdbqt,drug_pdbqt_paths,output_path,bio_a
         print(paste("Col: ", col_count,sep = ""))
       }
       if((row_count * col_count) %% 100 == 0){
-        save(file = paste(save_control_matrix_path,"/control_matrix.Rda",sep=""))
+        save(file = paste(save_control_matrix_path,"/control_matrix.Rda",sep=""),control_matrix)
       }
       for(i in 1:len_col){
         print(i)
@@ -170,7 +170,7 @@ compute_by_square <- function(bio_assay_pdbqt,drug_pdbqt_paths,output_path,bio_a
         print(paste("Col: ", col_count,sep = ""))
       }
       if((row_count * col_count) %% 100 == 0){
-        save(file = paste(save_control_matrix_path,"/control_matrix.Rda",sep=""))
+        save(file = paste(save_control_matrix_path,"/control_matrix.Rda",sep=""),control_matrix)
       }
       for(i in 1:len_row){
         print(i)
