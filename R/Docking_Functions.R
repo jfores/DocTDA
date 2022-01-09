@@ -62,3 +62,123 @@ create_vina_command <- function(x,y,z,w,exhaust = 8){
   }
   #print(vina_command)
 }
+
+#' compute_by_square
+#'
+#' Performs docking completing a rectangle.
+#'
+#' @param bio_assay_pdbqt vector with the absolute paths to the pdbqt files of the proteic structures we want to dock.
+#' @param drug_pdbqt_paths vector with the absolute paths to the drug pdbqt files.
+#' @param output_path string indicating the folder where docking data should be stored.
+#' @param bio_assay_paths Vector indicating the absolute paths to the pdb files for the protein structures.
+#' @param exhaust Exhaustiveness parameter for vina.
+#' @param path_save_control_matrix_path Path where the control matrix will be sotored or has been saved previouly.
+#' @param verbose Logical value. Print information or not.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' compute_by_square(bio_assay_pdbqt,drug_pdbqt_paths,output_path,bio_assay_paths,exhaust = 40,path_save_control_matrix_path,verbose = TRUE)
+#' }
+#'
+compute_by_square <- function(bio_assay_pdbqt,drug_pdbqt_paths,output_path,bio_assay_paths,exhaust = 40,path_save_control_matrix_path,verbose = TRUE){
+  if(file.exists( paste(save_control_matrix_path,"/control_matrix.Rda",sep=""))){
+    control_matrix <- get(load(file = paste(save_control_matrix_path,"/control_matrix.Rda",sep="")))
+    row_count <- which(apply(control_matrix,1,sum) < ncol(control_matrix))[1]
+    col_count <- which(control_matrix[row_count,] == FALSE)[1]
+    len_row <- length(bio_assay_pdbqt)
+    len_col <- length(drug_pdbqt_paths)
+  }else{
+    len_row <- length(bio_assay_pdbqt)
+    len_col <- length(drug_pdbqt_paths)
+    row_count <- 1
+    col_count <- 1
+    control_matrix <- matrix(FALSE,nrow = len_row,ncol = len_col)
+  }
+  continue_process <- TRUE
+  while(continue_process){
+    if(verbose){
+      print(paste("Row: ", row_count,sep = ""))
+      print(paste("Col: ", col_count,sep = ""))
+    }
+    if((row_count * col_count)%%100 = 0){
+      #save(file = paste(save_control_matrix_path,"/control_matrix.Rda",sep=""))
+    }
+    if(row_count == 1 & col_count == 1){
+      try({
+        #create_vina_command(bio_assay_pdbqt[row_count],drug_pdbqt_paths[col_count],output_path,bio_assay_paths[row_count],exhaust = exhaust)
+      })
+      control_matrix[row_count,col_count] <- TRUE
+      row_count <- row_count + 1
+      col_count <- col_count + 1
+    }else{
+      for(i in 1:col_count){
+        try({
+          #create_vina_command(bio_assay_pdbqt[row_count],drug_pdbqt_paths[i],output_path,bio_assay_paths[row_count],exhaust = exhaust)
+        })
+        control_matrix[row_count,i] <- TRUE
+      }
+      for(i in 1:(row_count-1)){
+        try({
+          #create_vina_command(bio_assay_pdbqt[i],drug_pdbqt_paths[col_count],output_path,bio_assay_paths[i],exhaust = exhaust)
+        })
+        control_matrix[i,col_count] <- TRUE
+      }
+      row_count <- row_count + 1
+      col_count <- col_count + 1
+    }
+    if((col_count > len_col) | (row_count > len_row)){
+      continue_process <- FALSE
+    }
+  }
+  if(len_row > len_col){
+    continue_process <- TRUE
+    while(continue_process){
+      if(verbose){
+        print(paste("Row: ", row_count,sep = ""))
+        print(paste("Col: ", col_count,sep = ""))
+      }
+      if((row_count * col_count)%%100 = 0){
+        #save(file = paste(save_control_matrix_path,"/control_matrix.Rda",sep=""))
+      }
+      for(i in 1:len_col){
+        print(i)
+        try({
+          #create_vina_command(bio_assay_pdbqt[row_count],drug_pdbqt_paths[i],output_path,bio_assay_paths[row_count],exhaust = exhaust)
+        })
+        control_matrix[row_count,i] <- TRUE
+      }
+      row_count <- row_count + 1
+      if(row_count > len_row){
+        continue_process <- FALSE
+      }
+    }
+  }
+
+  if(len_row > len_col){
+    continue_process <- TRUE
+    while(continue_process){
+      if(verbose){
+        print(paste("Row: ", row_count,sep = ""))
+        print(paste("Col: ", col_count,sep = ""))
+      }
+      if((row_count * col_count)%%100 = 0){
+        #save(file = paste(save_control_matrix_path,"/control_matrix.Rda",sep=""))
+      }
+      for(i in 1:len_col){
+        print(i)
+        try({
+          #create_vina_command(bio_assay_pdbqt[row_count],drug_pdbqt_paths[i],output_path,bio_assay_paths[row_count],exhaust = exhaust)
+        })
+        control_matrix[row_count,i] <- TRUE
+      }
+      row_count <- row_count + 1
+      if(row_count > len_row){
+        continue_process <- FALSE
+      }
+    }
+  }
+  return(control_matrix)
+}
