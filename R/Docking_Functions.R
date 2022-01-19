@@ -89,8 +89,8 @@ compute_by_square <- function(bio_assay_pdbqt,drug_pdbqt_paths,output_path,bio_a
   if(file.exists( paste(save_control_matrix_path,"/control_matrix.Rda",sep=""))){
     print(paste(save_control_matrix_path,"/control_matrix.Rda",sep=""))
     control_matrix <- get(load(file = paste(save_control_matrix_path,"/control_matrix.Rda",sep="")))
-    row_count <- which(apply(control_matrix,1,sum) < ncol(control_matrix))[1]
-    col_count <- which(control_matrix[row_count,] == FALSE)[1]
+    row_count <- get(load(file =  paste(save_control_matrix_path,"/row_count.Rda",sep="")))
+    col_count <- get(load(file =  paste(save_control_matrix_path,"/col_count.Rda",sep="")))
     len_row <- length(bio_assay_pdbqt)
     len_col <- length(drug_pdbqt_paths)
   }else{
@@ -109,6 +109,8 @@ compute_by_square <- function(bio_assay_pdbqt,drug_pdbqt_paths,output_path,bio_a
     }
     if((row_count * col_count) %% 100 == 0){
       save(file = paste(save_control_matrix_path,"/control_matrix.Rda",sep=""),control_matrix)
+      save(file = paste(save_control_matrix_path,"/row_count.Rda",sep=""),row_count)
+      save(file = paste(save_control_matrix_path,"/col_count.Rda",sep=""),col_count)
     }
     if(row_count == 1 & col_count == 1){
       try({
@@ -147,6 +149,8 @@ compute_by_square <- function(bio_assay_pdbqt,drug_pdbqt_paths,output_path,bio_a
       }
       if((row_count * col_count) %% 100 == 0){
         save(file = paste(save_control_matrix_path,"/control_matrix.Rda",sep=""),control_matrix)
+        save(file = paste(save_control_matrix_path,"/row_count.Rda",sep=""),row_count)
+        save(file = paste(save_control_matrix_path,"/col_count.Rda",sep=""),col_count)
       }
       for(i in 1:len_col){
         print(i)
@@ -173,6 +177,8 @@ compute_by_square <- function(bio_assay_pdbqt,drug_pdbqt_paths,output_path,bio_a
       }
       if((row_count * col_count) %% 100 == 0){
         save(file = paste(save_control_matrix_path,"/control_matrix.Rda",sep=""),control_matrix)
+        save(file = paste(save_control_matrix_path,"/row_count.Rda",sep=""),row_count)
+        save(file = paste(save_control_matrix_path,"/col_count.Rda",sep=""),col_count)
       }
       for(i in 1:len_row){
         print(i)
