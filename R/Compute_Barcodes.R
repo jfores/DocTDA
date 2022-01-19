@@ -237,3 +237,40 @@ compute_bc_round_multi <- function(x,dir_bc){
     gc()
   })
 }
+
+
+
+#' compute_bc_and_save
+#'
+#' Given a directory where pdb structures are stored and an output directory the function reads the pdb structures if the number of alopha carbons is smaller than a specificed trheshold it computes the barcodes for the struecture and save them in the output directory.
+#'
+#' @param dir_in Directory where the biological assembly pdb structures were stored.
+#' @param dir_out Output directory
+#' @param n_alpha_filt Maximum number of alpha carbons allowed.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' compute_bc_and_save(dir_in,ir_bc,alpha_filt = 1000)
+#' }
+compute_bc_and_save <- function(dir_in,dir_out,n_alpha_filt = 1000){
+  pdb_files <- dir(dir_in,full.names = T)
+  computed_barcodes <- dir(dir_out,full.names = T)
+  pb <- utils::txtProgressBar(min = 0, max = length(pdb_files))
+  for(i in 1:length(pdb_files)){
+    utils::setTxtProgressBar(pb, i)
+    name_structure <- paste(dir_out,"/",gsub("clean.pdb","BC.Rda",gsub(".*/","",pdb_files[i])),sep="")
+    if(!(name_structure %in% computed_barcodes)){
+      structure_temp <- read_multi_pdb(pdb_files[i])[[1]]
+      ca.inds <- bio3d::atom.select(structure_temp,string = "calpha")
+      structure_temp <- bio3d::trim.pdb(structure_temp,ca.inds)$atom[,c("x","y","z")]
+      if(nrow(structure_temp) < n_alpha_filt){
+        bc_temp <- compute_homology(structure_temp)
+        bc_temp <- add_pseudo_barcode(bc_temp)
+        save(file = name_structure,bc_temp)
+      }
+    }
+  }
+}
