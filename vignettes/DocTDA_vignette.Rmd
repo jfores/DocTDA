@@ -159,5 +159,16 @@ x_size <- range(pdb_readed$atom$x)[2] -range(pdb_readed$atom$x)[1]
 y_size <- range(pdb_readed$atom$y)[2] -range(pdb_readed$atom$y)[1]
 z_size <- range(pdb_readed$atom$z)[2] -range(pdb_readed$atom$z)[1]
 
+#Parsing logs
+
+file_test <- "/home/jj/Desktop/DrugBank/Experiment_One/1A00_bio_1_AND_DB00118.log"
+
+parse_max_energy_vina <- function(log_file_path){
+  read_temp <- readLines(log_file_path)
+  max_bin_en <- as.numeric(strsplit(read_temp[which(grepl("kcal/mol",read_temp)) + 2]," ")[[1]][13])
+  return(max_bin_en)
+  }
+
+
 ```
 
