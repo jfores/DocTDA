@@ -15,9 +15,9 @@
 #' }
 compute_sim_barcode_pair_aux <- function(pbf_a_one_dim,pbf_b_one_dim,range_x_axis){
   f_1 <- approxfun(range_x_axis, pmin(pbf_a_one_dim,pbf_b_one_dim))
-  f_1_int <- integrate(f_1, min(range_x_axis), max(range_x_axis),subdivisions = 1000L)
+  f_1_int <- integrate(f_1, min(range_x_axis), max(range_x_axis),subdivisions = 1000L,stop.on.error = FALSE)
   f_2 <- approxfun(range_x_axis, pmax(pbf_a_one_dim,pbf_b_one_dim))
-  f_2_int <- integrate(f_2, min(range_x_axis), max(range_x_axis),subdivisions = 1000L)
+  f_2_int <- integrate(f_2, min(range_x_axis), max(range_x_axis),subdivisions = 1000L,stop.on.error = FALSE)
   sim_dim <- f_1_int$value/f_2_int$value
   return(sim_dim)
 }
