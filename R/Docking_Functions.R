@@ -24,6 +24,7 @@ create_config_pdb <- function(x){
   x_size <- range(pdb_readed$atom$x)[2] -range(pdb_readed$atom$x)[1]
   y_size <- range(pdb_readed$atom$y)[2] -range(pdb_readed$atom$y)[1]
   z_size <- range(pdb_readed$atom$z)[2] -range(pdb_readed$atom$z)[1]
+  pirnt(list(center_of_mass[1],center_of_mass[2],center_of_mass[3],x_size,y_size,z_size))
   return(list(center_of_mass[1],center_of_mass[2],center_of_mass[3],x_size,y_size,z_size))
 }
 
