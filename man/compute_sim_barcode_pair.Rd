@@ -19,3 +19,8 @@ returns a list with the similarities between the barcodes of
 \description{
 Compute the barcode betti similarity function for all the studied dimension in two given structures.
 }
+\examples{
+\dontrun{
+compute_sim_barcode_pair(barcode_a,barcode_b,resolution)
+}
+}

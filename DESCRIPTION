@@ -14,6 +14,7 @@ Imports:
     bio3d,
     cowplot,
     dbparser,
+    doParallel,
     dplyr,
     ggplot2,
     gridExtra,
