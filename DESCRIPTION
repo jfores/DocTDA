@@ -16,6 +16,7 @@ Imports:
     dbparser,
     doParallel,
     dplyr,
+    foreach,
     ggplot2,
     gridExtra,
     magrittr,

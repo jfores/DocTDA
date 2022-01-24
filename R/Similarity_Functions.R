@@ -87,7 +87,7 @@ compute_sim_two_dir_bar <- function(dir_a,dir_b,dir_out,n_cores = 30){
     save(file = paste(dir_out,"/list_out.Rda",sep=""),list_out)
     save(file = paste(dir_out,"/start_iter.Rda",sep=""),i)
   }
-  doParallel::registerDoSEQ()
+  foreach::registerDoSEQ()
   row_names_mat <- gsub("_BC.Rda","",gsub(".*/","",dir_a))
   col_names_mat <- gsub("_BC.Rda","",gsub(".*/","",dir_b))
   b_cero <- do.call("rbind",lapply(list_out,function(x) unlist(lapply(x,function(x)x[1]))))
