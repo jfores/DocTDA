@@ -79,7 +79,7 @@ compute_sim_two_dir_bar <- function(dir_a,dir_b,dir_out,n_cores = 30){
   for(i in start_iter:length(dir_a)){
     print(i)
     temp_1 <- get(load(file = dir_a[i]))
-    list_out[[i]] <- foreach(j = 1:length(dir_b)) %dopar%
+    list_out[[i]] <- foreach::foreach(j = 1:length(dir_b)) %dopar%
       {
         temp_2 <- get(load(file = dir_b[j]))
         temp_3 <- compute_sim_barcode_pair(temp_1,temp_2)
@@ -105,3 +105,65 @@ compute_sim_two_dir_bar <- function(dir_a,dir_b,dir_out,n_cores = 30){
   list_mat <- list(b_cero,b_one,b_two,b_mean)
   return(list_mat)
 }
+
+
+
+#' compute_sim_one_dir_bar
+#'
+#' @param path_to_bcs vector including the complete paths to all barcode files.
+#' @param dir_out directory where the output data must be written.
+#' @param n_cores Number of processores used in for each
+#' @param tail_to_remove Tail tagg to remove from barcode name.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' compute_sim_one_dir_bar(path_to_bcs,dir_out,n_cores,tail_to_remove)
+#' }
+compute_sim_one_dir_bar <- function(path_to_bcs,dir_out,n_cores = 30,tail_to_remove = ".Rda"){
+  if(file.exists(paste(dir_out,"/list_out.Rda",sep=""))){
+    list_out <- get(load(paste(dir_out,"/list_out.Rda",sep="")))
+    start_iter <- get(load(paste(dir_out,"/start_iter.Rda",sep="")))
+  }
+  else{
+    list_out <- list()
+    start_iter <- 1
+  }
+  doParallel::registerDoParallel(n_cores)
+  for(i in start_iter:length(path_to_bcs)){
+    print(i)
+    temp_1 <- get(load(file = path_to_bcs[i]))
+    list_out[[i]] <- foreach::foreach(j = i:length(path_to_bcs)) %dopar%
+      {
+        temp_2 <- get(load(file = path_to_bcs[j]))
+        temp_3 <- compute_sim_barcode_pair(temp_1,temp_2)
+      }
+    save(file = paste(dir_out,"/list_out.Rda",sep=""),list_out)
+    save(file = paste(dir_out,"/start_iter.Rda",sep=""),i)
+  }
+  for(i in 1:length(list_out)){
+    #print(i -1)
+    temp <- rep(list(c(0,0,0)),i-1)
+    list_out[[i]] <- c(temp,list_out[[i]])
+  }
+  foreach::registerDoSEQ()
+  row_col_names <- gsub(tail_to_remove,"",gsub(".*/","",path_to_bcs))
+  b_cero <- do.call("rbind",lapply(list_out,function(x) unlist(lapply(x,function(x)x[1]))))
+  rownames(b_cero) <- row_col_names
+  colnames(b_cero) <- row_col_names
+  b_one <- do.call("rbind",lapply(list_out,function(x) unlist(lapply(x,function(x)x[2]))))
+  rownames(b_one) <- row_col_names
+  colnames(b_one) <- row_col_names
+  b_two <- do.call("rbind",lapply(list_out,function(x) unlist(lapply(x,function(x)x[3]))))
+  rownames(b_two) <- row_col_names
+  colnames(b_two) <- row_col_names
+  b_mean <- (b_cero + b_one + b_two)/3
+  rownames(b_mean) <- row_col_names
+  colnames(b_mean) <- row_col_names
+  list_mat <- list(b_cero,b_one,b_two,b_mean)
+  return(list_mat)
+}
+
+
