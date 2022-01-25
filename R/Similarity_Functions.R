@@ -115,6 +115,7 @@ compute_sim_two_dir_bar <- function(dir_a,dir_b,dir_out,n_cores = 30){
 #' @param n_cores Number of processores used in for each
 #' @param tail_to_remove Tail tagg to remove from barcode name.
 #'
+#' @importFrom foreach %dopar%
 #' @return
 #' @export
 #'
@@ -123,7 +124,7 @@ compute_sim_two_dir_bar <- function(dir_a,dir_b,dir_out,n_cores = 30){
 #' compute_sim_one_dir_bar(path_to_bcs,dir_out,n_cores,tail_to_remove)
 #' }
 compute_sim_one_dir_bar <- function(path_to_bcs,dir_out,n_cores = 30,tail_to_remove = ".Rda"){
-  `%dopar%` <- foreach::`%dopar%`
+  #`%dopar%` <- foreach::`%dopar%`
   if(file.exists(paste(dir_out,"/list_out.Rda",sep=""))){
     list_out <- get(load(paste(dir_out,"/list_out.Rda",sep="")))
     start_iter <- get(load(paste(dir_out,"/start_iter.Rda",sep="")))
