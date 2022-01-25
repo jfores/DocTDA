@@ -21,6 +21,7 @@ Imports:
     gridExtra,
     magrittr,
     progress,
+    reshape2,
     stats,
     TDAstats,
     tidyr,
