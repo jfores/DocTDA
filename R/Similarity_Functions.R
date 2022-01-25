@@ -40,12 +40,15 @@ compute_sim_barcode_pair_aux <- function(pbf_a_one_dim,pbf_b_one_dim,range_x_axi
 #' compute_sim_barcode_pair(barcode_a,barcode_b,resolution)
 #' }
 compute_sim_barcode_pair <- function(barcode_a,barcode_b,resolution = 0.01){
+  try({
   max_a <- max(barcode_a[,2:3])
   max_b <- max(barcode_b[,2:3])
   range_x_axis <- seq(from = 0, to = max(max_a,max_b)+5, by = resolution )
   pbf_a <- compute_pbf(range_x_axis,barcode_a,k=2)
   pbf_b <- compute_pbf(range_x_axis,barcode_b,k=2)
   return(mapply(compute_sim_barcode_pair_aux, pbf_a,pbf_b,MoreArgs = list(range_x_axis)))
+  })
+  return(c(0,0,0))
 }
 
 
