@@ -131,6 +131,7 @@ compute_sim_one_dir_bar <- function(path_to_bcs,dir_out,n_cores = 30,tail_to_rem
   if(file.exists(paste(dir_out,"/list_out.Rda",sep=""))){
     list_out <- get(load(paste(dir_out,"/list_out.Rda",sep="")))
     start_iter <- get(load(paste(dir_out,"/start_iter.Rda",sep="")))
+    start_iter <- start_iter + 1
   }
   else{
     list_out <- list()
