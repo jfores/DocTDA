@@ -213,3 +213,41 @@ mount_matrix <- function(dir_files,structures_ini,tail_to_remove = ".Rda"){
   list_mat <- list(b_cero,b_one,b_two,b_mean)
   return(list_mat)
 }
+
+
+
+#' aux_fun_complete_matrices
+#'
+#' @param x upper diagonal matrix to complete.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' aux_fun_complete_matrices(x)
+#' }
+aux_fun_complete_matrices <- function(x){
+  x_t <- t(x)
+  x[lower.tri(x)] <- x_t[lower.tri(x_t)]
+  return(x)
+
+}
+
+
+#' complete_matrices
+#'
+#' @param sim_mat_list list of similarity matrices derived from compute_sim_one_dir_bar or compute_sim_two_dir_bar
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' complete_matrices(sim_mat_list)
+#' }
+complete_matrices <- function(sim_mat_list){
+  return(lapply(sim_mat_list,aux_fun_complete_matrices))
+}
+
+
