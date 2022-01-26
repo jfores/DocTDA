@@ -70,8 +70,7 @@ aux_same_drug_diff_struc <- function(x){
   list_out <- list()
   for(i in 1:nrow(x)){
     for(j in (i+1):nrow(x)){
-      list_out[[counter_test]] <- c(x[i,1],x[j,1],abs(x[i,4]-x[j,4]),mean(c(abs(x[i,4],abs(x[j,4]))))
-)
+      list_out[[counter_test]] <- c(x[i,1],x[j,1],abs(x[i,4]-x[j,4]),(abs(x[i,4]) + abs(x[j,4]))/2)
       counter_test <- counter_test + 1
     }
   }
