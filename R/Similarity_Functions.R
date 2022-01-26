@@ -136,8 +136,8 @@ compute_sim_one_dir_bar <- function(path_to_bcs,dir_out,n_cores = 30,tail_to_rem
     list_out <- list()
     start_iter <- 1
   }
-  doParallel::registerDoParallel(n_cores)
   for(i in start_iter:length(path_to_bcs)){
+    doParallel::registerDoParallel(n_cores)
     print(i)
     temp_1 <- get(load(file = path_to_bcs[i]))
     list_out[[i]] <- foreach::foreach(j = i:length(path_to_bcs)) %dopar%
@@ -147,13 +147,14 @@ compute_sim_one_dir_bar <- function(path_to_bcs,dir_out,n_cores = 30,tail_to_rem
       }
     save(file = paste(dir_out,"/list_out.Rda",sep=""),list_out)
     save(file = paste(dir_out,"/start_iter.Rda",sep=""),i)
+    foreach::registerDoSEQ()
+    gc()
   }
   for(i in 1:length(list_out)){
     #print(i -1)
     temp <- rep(list(c(0,0,0)),i-1)
     list_out[[i]] <- c(temp,list_out[[i]])
   }
-  foreach::registerDoSEQ()
   row_col_names <- gsub(tail_to_remove,"",gsub(".*/","",path_to_bcs))
   b_cero <- do.call("rbind",lapply(list_out,function(x) unlist(lapply(x,function(x)x[1]))))
   rownames(b_cero) <- row_col_names
@@ -172,3 +173,42 @@ compute_sim_one_dir_bar <- function(path_to_bcs,dir_out,n_cores = 30,tail_to_rem
 }
 
 
+
+#' mount_matrix
+#'
+#' Mounts distance matrix from partially computed distances.
+#'
+#' @param dir_files directory where the output intermediate files from compute_sim_one_dir_bar or compute_sim_two_dir_bar are placed
+#' @param structures_ini original list of barcodes to compute used to compute similarities.
+#' @param tail_to_remove  character string to remove from the tail of the barcode file paths.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' mount_matrix(dir_files,structures_ini,tail_to_remove)
+#' }
+mount_matrix <- function(dir_files,structures_ini,tail_to_remove = ".Rda"){
+  list_out <- get(load(paste(dir_files,"/list_out.Rda",sep="")))
+  for(i in 1:length(list_out)){
+    #print(i -1)
+    temp <- rep(list(c(0,0,0)),i-1)
+    list_out[[i]] <- c(temp,list_out[[i]])
+  }
+  row_col_names <- gsub(tail_to_remove,"",gsub(".*/","",structures_ini))
+  b_cero <- do.call("rbind",lapply(list_out,function(x) unlist(lapply(x,function(x)x[1]))))
+  rownames(b_cero) <- row_col_names[1:nrow(b_cero)]
+  colnames(b_cero) <- row_col_names
+  b_one <- do.call("rbind",lapply(list_out,function(x) unlist(lapply(x,function(x)x[2]))))
+  rownames(b_one) <- row_col_names[1:nrow(b_one)]
+  colnames(b_one) <- row_col_names
+  b_two <- do.call("rbind",lapply(list_out,function(x) unlist(lapply(x,function(x)x[3]))))
+  rownames(b_two) <- row_col_names[1:nrow(b_two)]
+  colnames(b_two) <- row_col_names
+  b_mean <- (b_cero + b_one + b_two)/3
+  rownames(b_mean) <- row_col_names[1:nrow(b_mean)]
+  colnames(b_mean) <- row_col_names
+  list_mat <- list(b_cero,b_one,b_two,b_mean)
+  return(list_mat)
+}
