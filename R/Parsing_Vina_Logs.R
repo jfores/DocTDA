@@ -75,8 +75,9 @@ aux_same_drug_diff_struc <- function(x){
     }
   }
   df_diffs  <- data.frame(do.call("rbind",list_out))
-  df_diffs$X3 <- as.numeric(df_diffs$X3)
-  colnames(df_diffs) <- c("Str_1","Str_2","Abs_Diff")
+  df_diffs[,3] <- as.numeric(df_diffs[,3])
+  df_diffs[,4] <- as.numeric(df_diffs[,4])
+  colnames(df_diffs) <- c("Str_1","Str_2","Abs_Diff","Ab_En")
   return(df_diffs)
 }
 
