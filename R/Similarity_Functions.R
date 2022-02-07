@@ -228,6 +228,9 @@ mount_matrix <- function(dir_files,structures_ini,tail_to_remove = ".Rda"){
 #' aux_fun_complete_matrices(x)
 #' }
 aux_fun_complete_matrices <- function(x){
+  if(nrow(x) != ncol(x)){
+    x <- rbind(x,matrix(0,nrow = ncol(x) - nrow(x),ncol = ncol(x)))
+  }
   x_t <- t(x)
   x[lower.tri(x)] <- x_t[lower.tri(x_t)]
   return(x)
