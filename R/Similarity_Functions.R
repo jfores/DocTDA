@@ -233,6 +233,7 @@ aux_fun_complete_matrices <- function(x){
   }
   x_t <- t(x)
   x[lower.tri(x)] <- x_t[lower.tri(x_t)]
+  rownames(x) <- colnames(x)
   return(x)
 
 }
