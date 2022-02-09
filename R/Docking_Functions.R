@@ -222,7 +222,7 @@ parallel_drug_prep <- function(x,path_to_mk_prepare = "/home/antoniojr/anaconda3
   name_temp <- strsplit(x,"/")[[1]]
   name_temp <- name_temp[length(name_temp)]
   name_temp <- gsub("sdf","pdbqt",name_temp)
-  out_path <- paste(out_dir,"/",name_temp)
+  out_path <- paste(out_dir,"/",name_temp,sep="")
   command_to_run <- paste(path_to_mk_prepare," -i ",x," -o",out_path," --pH 7.4")
   print(command_to_run)
   system(command_to_run)
