@@ -170,10 +170,15 @@ parse_max_energy_vina <- function(log_file_path){
   }
 
 
-temp <- "/home/jj/Desktop/jjjj.pdb"
-temp_2 <- strsplit(temp,"/")[[1]]
-temp_2 <- temp_2[length(temp_2)]
-temp_2 <- gsub("pdb","pdbqt")
+#Copy drug 3D structures to antonio...
+
+#scp /home/jj/Desktop/DrugBank/Drug_Structures/"3D structures.sdf"  antoniojr@10.30.227.10:"/home/antoniojr/Prueba\ similitud/Drugs"
+
+#Copy split drugs to antonio
+
+#scp /home/jj/Desktop/DrugBank/Drug_Structures/split_sdf.py   antoniojr@10.30.227.10:"/home/antoniojr/Prueba\ similitud/Drugs"
+
+
 
 ```
 

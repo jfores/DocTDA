@@ -218,8 +218,12 @@ compute_by_square <- function(bio_assay_pdbqt,drug_pdbqt_paths,output_path,bio_a
 #' parallel_drug_prep(x,path_to_mk_prepare)
 #' }
 #'
-parallel_drug_prep <- function(x,path_to_mk_prepare = "/home/antoniojr/anaconda3/envs/py36/scripts/mk_prepare_ligand.py"){
-  command_to_run <- paste(path_to_mk_prepare," -i ",x," -o",gsub("Drug_Name","Drug_PDBQT",gsub("sdf","pdbqt",x))," --pH 7.4")
+parallel_drug_prep <- function(x,path_to_mk_prepare = "/home/antoniojr/anaconda3/envs/py36/scripts/mk_prepare_ligand.py",out_dir){
+  name_temp <- strsplit(x,"/")[[1]]
+  name_temp <- name_temp[length(name_temp)]
+  name_temp <- gsub("sdf","pdbqt",name_temp)
+  out_path <- paste(out_dir,"/",name_temp)
+  command_to_run <- paste(path_to_mk_prepare," -i ",x," -o",out_path," --pH 7.4")
   print(command_to_run)
   system(command_to_run)
 }
