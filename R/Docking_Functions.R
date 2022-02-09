@@ -223,3 +223,36 @@ parallel_drug_prep <- function(x,path_to_mk_prepare = "/home/antoniojr/anaconda3
   print(command_to_run)
   system(command_to_run)
 }
+
+
+
+#' prepare_protein_structure
+#'
+#' prepares protein structures for docking.
+#'
+#' @param x paht to docking structure.
+#' @param path_to_prepare_receptor absolute path to prepare_receptor4.py script
+#' @param out_dir path to the directory where the output must be saved.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' prepare_protein_structure(x,path_to_prepare_receptor,out_dir)
+#' }
+#'
+prepare_protein_structure <- function(x,path_to_prepare_receptor = "/home/antoniojr/anaconda3/envs/py36/MGLToolsPckgs/AutoDockTools/Utilities24/prepare_receptor4.py",out_dir){
+  command_a <- paste(path_to_prepare_receptor," -r ",sep="")
+  command_b <- x
+  command_c <- "-o"
+  command_d <- strsplit(x,"/")[[1]]
+  command_d <- command_d[length(command_d)]
+  command_d <- gsub("pdb","pdbqt",command_d)
+  command_d <- paste(out_dir,"/",command_d,sep = "")
+  command_e <- "-A \"hydrogens\""
+  command_final <- paste(command_a,command_b,command_c,command_d,command_e)
+  system(command_final)
+}
+
+

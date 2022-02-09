@@ -170,5 +170,10 @@ parse_max_energy_vina <- function(log_file_path){
   }
 
 
+temp <- "/home/jj/Desktop/jjjj.pdb"
+temp_2 <- strsplit(temp,"/")[[1]]
+temp_2 <- temp_2[length(temp_2)]
+temp_2 <- gsub("pdb","pdbqt")
+
 ```
 
