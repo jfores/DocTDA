@@ -178,6 +178,7 @@ parse_max_energy_vina <- function(log_file_path){
 
 #scp /home/jj/Desktop/DrugBank/Drug_Structures/split_sdf.py   antoniojr@10.30.227.10:"/home/antoniojr/Prueba\ similitud/Drugs"
 
+##python split_sdf.py 
 
 
 ```
