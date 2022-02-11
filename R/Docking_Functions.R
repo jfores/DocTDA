@@ -336,7 +336,7 @@ create_vina_command_2 <- function(x,y,z,w,exhaust = 8){
   vina_command <- paste("vina --receptor ",x, " --ligand ",y," --out ",out_file, " --center_x ", round(list_out[[1]],digits = 2)," --center_y ",round(list_out[[2]],digits = 2)," --center_z ",round(list_out[[3]],digits = 2)," --size_x ", round(list_out[[4]],digits = 2)," --size_y ",round(list_out[[5]],digits = 2)," --size_z ",round(list_out[[6]],digits = 2)," --exhaustiveness ",exhaust," --log ",temp_log,sep="")
   #if(!(out_file %in% dir(z,full.names = TRUE))){
     #print("Running vina...")
-    #system(vina_command)
+  system(vina_command)
 
   #}
   print(vina_command)
