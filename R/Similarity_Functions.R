@@ -255,3 +255,154 @@ complete_matrices <- function(sim_mat_list){
 }
 
 
+#' transform_sim_mat
+#'
+#' Gets completed similarity matrices and generates a clean data.frame
+#'
+#'
+#' @param sim_matrices_comp list of similarity matrices
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' transform_sim_mat(sim_matrices_comp)
+#' }
+transform_sim_mat <- function(sim_matrices_comp){
+
+  #Getting similarity matrices removing similarities between the same structures and setting the lower diagonal to cero...
+
+  sim_cero <-  sim_matrices_comp[[1]]
+  diag(sim_cero) <- 0
+  sim_cero[lower.tri(sim_cero)] <- 0
+  sim_cero_melt <- reshape2::melt(sim_cero)
+
+  sim_one <-  sim_matrices_comp[[2]]
+  diag(sim_one) <- 0
+  sim_one[lower.tri(sim_one)] <- 0
+  sim_one_melt <- reshape2::melt(sim_one)
+
+  sim_two <-  sim_matrices_comp[[3]]
+  diag(sim_two) <- 0
+  sim_two[lower.tri(sim_two)] <- 0
+  sim_two_melt <- reshape2::melt(sim_two)
+
+  sim_av <- sim_matrices_comp[[4]]
+  diag(sim_av) <- 0
+  sim_av[lower.tri(sim_av)] <- 0
+  sim_av_melt <- reshape2::melt(sim_av)
+
+  #merging simmilarities for all dimensions...
+
+  all_sim_melt <- cbind(sim_cero_melt,sim_one_melt,sim_two_melt,sim_av_melt)
+  all_sim_melt <- all_sim_melt[,-c(4,5,7,8,10,11)]
+  colnames(all_sim_melt) <- c("Str_1","Str_2","D_Zero","D_One","D_Two","D_Av")
+
+  #Removing similarities between identical structures...
+
+  all_sim_melt <- all_sim_melt[!all_sim_melt$Str_1 == all_sim_melt$Str_2,]
+
+  #Removing similarities with AV_sim = 0
+
+  all_sim_melt <- all_sim_melt[!all_sim_melt$D_Av == 0,]
+
+  #Ordering matrix based on the average similarities with decreasing values...
+
+  all_sim_melt <- all_sim_melt[order(all_sim_melt$D_Av,decreasing = TRUE),]
+
+  return(all_sim_melt)
+}
+
+
+#' sample_structures_a
+#'
+#' Add group labels based on av similarity values.
+#'
+#' @param x output dataframe from transform_sim_mat.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' sample_structures_a(x)
+#' }
+sample_structures_a <- function(x){
+  x$group <- rep(NA, nrow(x))
+  x[x[,3] > 0.95,7] <- 1
+  x[x[,3] > 0.9 & x[,6] <= 0.95,7] <- 2
+  x[x[,3] > 0.85 & x[,6] <= 0.9,7] <- 3
+  x[x[,3] > 0.8 & x[,6] <= 0.85,7] <- 4
+  x[x[,3] > 0.75 & x[,6] <= 0.8,7] <- 5
+  x[x[,3] > 0.70 & x[,6] <= 0.75,7] <- 6
+  x[x[,3] > 0.65 & x[,6] <= 0.70,7] <- 7
+  x[x[,3] > 0.60 & x[,6] <= 0.65,7] <- 8
+  x[x[,3] > 0.55 & x[,6] <= 0.60,7] <- 9
+  x[x[,3] > 0.50 & x[,6] <= 0.55,7] <- 10
+  x[x[,3] > 0.45 & x[,6] <= 0.50,7] <- 11
+  x[x[,3] > 0.40 & x[,6] <= 0.45,7] <- 12
+  x[x[,3] > 0.35 & x[,6] <= 0.40,7] <- 13
+  x[x[,3] > 0.30 & x[,6] <= 0.35,7] <- 14
+  x[x[,3] > 0.25 & x[,6] <= 0.30,7] <- 15
+  x[x[,3] > 0.20 & x[,6] <= 0.25,7] <- 16
+  x[x[,3] > 0.15 & x[,6] <= 0.20,7] <- 17
+  x[x[,3] > 0.10 & x[,6] <= 0.15,7] <- 18
+  x[x[,3] > 0.05 & x[,6] <= 0.10,7] <- 19
+  x[x[,3] <= 0.05,7] <- 20
+  return(x)
+}
+
+
+
+#' aux_function_samp_b
+#'
+#' Auxiliar function for sample_structures_b
+#'
+#' @param x
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' aux_function_samp_b(x)
+#' }
+aux_function_samp_b <- function(x){
+  try({
+    x[min(which(x[,8] == "No")),8] <- "Yes"
+    return(x)
+  },silent = TRUE)
+  return(x)
+}
+
+
+#' sample_structures_b
+#'
+#' Sample n structures from each group. Uses sample_structures_a output to select n similarities from each group.
+#'
+#'
+#' @param x output form sample_structures_a
+#' @param rounds Number of elements to be selected from each group.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' sample_structures_b(x,rounds = 2)
+#' }
+sample_structures_b <- function(x,rounds = 2){
+  x$sampled <- rep("No",nrow(x))
+  x_splitted <- split(x,as.factor(x[,7]))
+  for(i in 1:rounds){
+    x_splitted <- lapply(x_splitted,aux_function_samp_b)
+  }
+  x <- do.call("rbind",x_splitted)
+  return(x)
+}
+
+
+
+
+
