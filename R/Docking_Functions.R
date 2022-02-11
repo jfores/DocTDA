@@ -330,7 +330,8 @@ create_vina_command_2 <- function(x,y,z,w,exhaust = 8){
   temp_log <- gsub("pdbqt","log",out_file)
   #print(temp_log)
   #print("Here...")
-  list_out <- create_config_pdb(temp_pdb_file)
+  #temp_pdb_file
+  list_out <- create_config_pdb(x)
   #print("Here 2...")
   #print(list_out)
   vina_command <- paste("vina --receptor ",x, " --ligand ",y," --out ",out_file, " --center_x ", round(list_out[[1]],digits = 2)," --center_y ",round(list_out[[2]],digits = 2)," --center_z ",round(list_out[[3]],digits = 2)," --size_x ", round(list_out[[4]],digits = 2)," --size_y ",round(list_out[[5]],digits = 2)," --size_z ",round(list_out[[6]],digits = 2)," --exhaustiveness ",exhaust," --log ",temp_log,sep="")
