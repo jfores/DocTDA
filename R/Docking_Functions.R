@@ -305,5 +305,40 @@ get_paths_to_dock <- function(protein_test,drug_test,prot_estructures_prep,prot_
 }
 
 
+#' create_vina_command_2
+#'
+#' Function to create vina commands.
+#'
+#' @param x Path to protein pdbqt.
+#' @param y Path to ligand pdbqt.
+#' @param z Output pathway.
+#' @param w Path to receptor pdb files.
+#' @param exhaust Exhaustiveness parameter for vina.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' create_vina_command(x,y,z,w,exhaust)
+#' }
+#'
+create_vina_command_2 <- function(x,y,z,w,exhaust = 8){
+  out_file <- z
+  temp_pdb_file <- w
+  print(temp_pdb_file)
+  temp_log <- gsub("pdbqt","log",out_file)
+  #print(temp_log)
+  #print("Here...")
+  list_out <- create_config_pdb(temp_pdb_file)
+  #print("Here 2...")
+  #print(list_out)
+  vina_command <- paste("vina --receptor ",x, " --ligand ",y," --out ",out_file, " --center_x ", round(list_out[[1]],digits = 2)," --center_y ",round(list_out[[2]],digits = 2)," --center_z ",round(list_out[[3]],digits = 2)," --size_x ", round(list_out[[4]],digits = 2)," --size_y ",round(list_out[[5]],digits = 2)," --size_z ",round(list_out[[6]],digits = 2)," --exhaustiveness ",exhaust," --log ",temp_log,sep="")
+  #if(!(out_file %in% dir(z,full.names = TRUE))){
+    #print("Running vina...")
+    #system(vina_command)
 
+  }
+  print(vina_command)
+}
 
