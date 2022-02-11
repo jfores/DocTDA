@@ -259,3 +259,47 @@ prepare_protein_structure <- function(x,path_to_prepare_receptor = "/home/antoni
 }
 
 
+
+
+
+#' get_paths_to_dock
+#'
+#' @param protein_test biological assembly to dock
+#' @param drug_test Drug to dock
+#' @param prot_estructures_prep All prepared biological assemblies .pdbqt
+#' @param prot_estructures All prepared biological assemblies .pdb
+#' @param drug_structures_prep All prepared drug structures .pdbqt
+#' @param out_file Output file
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' get_paths_to_dock(protein_test,drug_test,prot_estructures_prep,prot_estructures,drug_structures_prep,out_file)
+#' }
+#'
+get_paths_to_dock <- function(protein_test,drug_test,prot_estructures_prep,prot_estructures,drug_structures_prep,out_file){
+
+  prot_estructures_prep_trimmed <- gsub("_clean.pdbqt","",unlist(lapply(strsplit(prot_estructures_prep,"/"),function(x) x[length(x)])))
+  file_prot_estructures_prep <- prot_estructures_prep[prot_estructures_prep_trimmed %in% protein_test]
+  print(file_prot_estructures_prep)
+
+  prot_estructures_trimmed <- gsub("_clean.pdb","",unlist(lapply(strsplit(prot_estructures,"/"),function(x) x[length(x)])))
+  file_prot_estructures <- prot_estructures[prot_estructures_trimmed %in% protein_test]
+  print(file_prot_estructures)
+
+  drug_trimmed <- gsub(".pdbqt","",unlist(lapply(strsplit(drug_structures_prep,"/"),function(x) x[length(x)])))
+  file_drug <- drug_structures_prep[drug_trimmed %in% drug_test]
+  print(file_drug)
+
+  out_file_complete <- paste(out_file,"/",protein_test,"_AND_",drug_test,".pdbqt",sep="")
+  print(out_file_complete)
+
+  return(list(file_prot_estructures_prep,file_prot_estructures,file_drug,out_file_complete))
+
+}
+
+
+
+
