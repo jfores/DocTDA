@@ -338,7 +338,7 @@ create_vina_command_2 <- function(x,y,z,w,exhaust = 8){
     #print("Running vina...")
     #system(vina_command)
 
-  }
+  #}
   print(vina_command)
 }
 
