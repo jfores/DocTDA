@@ -281,6 +281,10 @@ prepare_protein_structure <- function(x,path_to_prepare_receptor = "/home/antoni
 #'
 get_paths_to_dock <- function(protein_test,drug_test,prot_estructures_prep,prot_estructures,drug_structures_prep,out_file){
 
+  out_file_complete <- paste(out_file,"/",protein_test,"_AND_",drug_test,".pdbqt",sep="")
+  if(out_file_complete %in% dir(out_file,full.names = TRUE)){
+    return(NULL)
+  }
   prot_estructures_prep_trimmed <- gsub("_clean.pdbqt","",unlist(lapply(strsplit(prot_estructures_prep,"/"),function(x) x[length(x)])))
   file_prot_estructures_prep <- prot_estructures_prep[prot_estructures_prep_trimmed %in% protein_test]
   print(file_prot_estructures_prep)
@@ -293,7 +297,7 @@ get_paths_to_dock <- function(protein_test,drug_test,prot_estructures_prep,prot_
   file_drug <- drug_structures_prep[drug_trimmed %in% drug_test]
   print(file_drug)
 
-  out_file_complete <- paste(out_file,"/",protein_test,"_AND_",drug_test,".pdbqt",sep="")
+  #out_file_complete <- paste(out_file,"/",protein_test,"_AND_",drug_test,".pdbqt",sep="")
   print(out_file_complete)
 
   return(list(file_prot_estructures_prep,file_prot_estructures,file_drug,out_file_complete))
