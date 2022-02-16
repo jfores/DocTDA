@@ -12,6 +12,7 @@ RoxygenNote: 7.1.2
 Imports: 
     base,
     bio3d,
+    cluster,
     cowplot,
     dbparser,
     doParallel,
