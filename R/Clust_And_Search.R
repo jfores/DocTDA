@@ -47,3 +47,5 @@ get_level_two <- function(df_data,dist_mat,n_clust){
   names(splitted_clust_filt) <- medoids_data_filt
   return(splitted_clust_filt)
 }
+
+
