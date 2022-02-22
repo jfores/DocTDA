@@ -100,7 +100,7 @@ compute_pbf_for_curve(vec_vals = seq_to_compute,barcode = barcode_individual,dim
 ```
 
 
-```{r}
+```{r,eval=FALSE}
 #pdb_temp <- read.pdb("/home/jj/Desktop/DrugBank/SpikeProteinTest/6vxx.pdb")
 #pdb_temp$remark
 #test_clean <- get_bio_clean(pdb_temp,"/home/jj/Desktop/","6vxx")
@@ -126,7 +126,7 @@ View(test[[1]])
 ```
 
 
-```{r}
+```{r,eval=FALSE}
 rec <- "/home/jj/Desktop/DrugBank/Protein_PDBQT"
 lig <- "/home/jj/Desktop/DrugBank/Drug_PDBQT"
 out_path <- "/home/jj/Desktop/DrugBank/Experiment_One/"
