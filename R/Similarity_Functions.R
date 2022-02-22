@@ -403,7 +403,6 @@ sample_structures_b <- function(x,rounds = 2){
 }
 
 
-
 #' remove_ceros
 #'
 #' Function that removes rows and columns that only contain zeros from the similiarity matrices.
@@ -424,4 +423,129 @@ remove_ceros <- function(x){
   return(list_out)
 }
 
+
+
+
+
+#' search_bcs
+#'
+#' Given a specific barcode, the function carries out searches in the database and returns the barcodes displaying the higher simmilarity with the query barcode.
+#'
+#' @param bc_to_test Problem barcode.
+#' @param bc_to_test_name Probelm barcode name.
+#' @param level_one Level one clustering data of the database derived from get_level_one function
+#' @param level_two Level two clustering data from the database derived from the get_level_two funciton.
+#' @param dir_bcs Directory where the barcodes for the datbase structures are stored.
+#' @param n_cores Number of cores available for parallel colmuting.
+#' @param lev_one_thr Similarity threshold for level one clustering medioids.
+#' @param lev_two_thr Similarity threshold for level two clustering medioids.
+#' @param lev_three_thr Similarity thresuld for level three results.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' search_bcs(bc_to_test,bc_to_test_name,level_one,level_two,dir_bcs = "/media/data/jaume/DocTDA/Data/Round_1/Barcodes",n_cores,lev_one_thr = 0.8,lev_two_thr = 0.85,lev_three_thr = 0.90)
+#' }
+search_bcs <- function(bc_to_test,bc_to_test_name,level_one,level_two,dir_bcs = "/media/data/jaume/DocTDA/Data/Round_1/Barcodes",n_cores,lev_one_thr = 0.8,lev_two_thr = 0.85,lev_three_thr = 0.90){
+
+  # Prepare medioids to compute similarities.
+
+  dir_bcs <- dir(dir_bcs,full.names = TRUE)
+  bio_ass <- substr(gsub(".*/","",dir_bcs),1,10)
+  df_data <- data.frame(bio_ass,dir_bcs)
+  df_data_filt <- df_data[df_data$bio_ass %in% names(level_one),]
+  df_data_filt_ord <- df_data_filt[match(names(level_one),df_data_filt$bio_ass),]
+
+  # Compute distances with medioids of level 1 clusters.
+
+  doParallel::registerDoParallel(n_cores)
+  list_out <- foreach::foreach(j = 1:nrow(df_data_filt_ord)) %dopar%
+    {
+      temp_bc <- get(load(file = df_data_filt_ord[j,2]))
+      temp_sim <- compute_sim_barcode_pair(bc_to_test,temp_bc)
+    }
+  df_lev_one <- cbind(df_data_filt_ord,do.call("rbind",list_out))
+  df_lev_one$Av_Sim <- rowSums(df_lev_one[,c(3,4,5)])/3
+  colnames(df_lev_one)[3] <- "Sim_0"
+  colnames(df_lev_one)[4] <- "Sim_1"
+  colnames(df_lev_one)[5] <- "Sim_2"
+
+  foreach::registerDoSEQ()
+
+  # Prepare level two mediods to compute similarities.
+
+  df_lev_one_filt <- df_lev_one[df_lev_one$Av_Sim > lev_one_thr,,drop = F]
+  lev_two_medioids <- c()
+  list_out <- list()
+  for(i in 1:nrow(df_lev_one_filt)){
+    list_out[[i]] <- data.frame(rep(df_lev_one_filt[i,1],length(unlist(lapply(level_two,names)[[df_lev_one_filt[i,1]]]))),unlist(lapply(level_two,names)[[df_lev_one_filt[i,1]]]))
+  }
+  df_lev_two <- do.call("rbind",list_out)
+  colnames(df_lev_two) <- c("lev_one_meds","lev_two_meds")
+  df_data_filt_2 <- df_data[df_data[,1] %in% df_lev_two[,2],]
+  df_data_filt_2_ord <- df_data_filt_2[match(df_lev_two[,2],df_data_filt_2[,1]),]
+  df_lev_two <- cbind(df_lev_two,df_data_filt_2_ord)
+
+  # Compute distances to level two mediods.
+
+  doParallel::registerDoParallel(n_cores)
+  list_out <- foreach::foreach(j = 1:nrow(df_lev_two)) %dopar%
+    {
+      temp_bc <- get(load(file = df_lev_two[j,4]))
+      temp_sim <- compute_sim_barcode_pair(bc_to_test,temp_bc)
+    }
+
+  df_lev_two <- cbind(df_lev_two,do.call("rbind",list_out))
+  df_lev_two$Av_Sim <- rowSums(df_lev_two[,c(5,6,7)])/3
+  colnames(df_lev_two)[5] <- "Sim_0"
+  colnames(df_lev_two)[6] <- "Sim_1"
+  colnames(df_lev_two)[7] <- "Sim_2"
+
+  foreach::registerDoSEQ()
+
+  # Prepare level three data for computing similarities.
+
+  lev_three_temp <- df_lev_two
+  lev_three_temp_filt <- lev_three_temp[lev_three_temp$Av_Sim > lev_two_thr,]
+  list_out <- list()
+  for(i in 1:nrow(lev_three_temp_filt)){
+    lev_one_id <- lev_three_temp_filt[i,1]
+    lev_two_id <- lev_three_temp_filt[i,2]
+    df_to_save <- level_two[[lev_one_id]][[lev_two_id]]
+    df_to_save <- cbind(rep(lev_one_id,nrow(df_to_save)),rep(lev_two_id,nrow(df_to_save)),df_to_save)
+    df_to_save <- df_to_save[,-3]
+    colnames(df_to_save) <- c("lev_one_meds","lev_two_meds","lev_three")
+    list_out[[i]] <- df_to_save
+  }
+  lev_three_temp <- do.call("rbind",list_out)
+  df_data_filt_3 <- df_data[df_data$bio_ass %in% lev_three_temp$lev_three,]
+  df_data_filt_3_ord <- df_data_filt_3[match(lev_three_temp$lev_three,df_data_filt_3$bio_ass),]
+  df_lev_three <- cbind(lev_three_temp,df_data_filt_3_ord)
+
+  # Compute distances for level three data.
+
+  doParallel::registerDoParallel(n_cores)
+  list_out <- foreach::foreach(j = 1:nrow(df_lev_three)) %dopar%
+    {
+      temp_bc <- get(load(file = df_lev_three[j,5]))
+      temp_sim <- compute_sim_barcode_pair(bc_to_test,temp_bc)
+    }
+
+  foreach::registerDoSEQ()
+
+
+  df_lev_three <- cbind(df_lev_three,do.call("rbind",list_out))
+  df_lev_three$Av_Sim <- rowSums(df_lev_three[,c(6,7,8)])/3
+  colnames(df_lev_three)[6] <- "Sim_0"
+  colnames(df_lev_three)[7] <- "Sim_1"
+  colnames(df_lev_three)[8] <- "Sim_2"
+  df_lev_three <- df_lev_three[df_lev_three$Av_Sim > lev_three_thr,]
+  df_lev_three <- df_lev_three[,-4]
+  query_Structure <- rep(bc_to_test_name,nrow(df_lev_three))
+  df_lev_three <- cbind(query_Structure,df_lev_three)
+
+  return(df_lev_three)
+}
 
