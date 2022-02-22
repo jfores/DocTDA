@@ -404,5 +404,24 @@ sample_structures_b <- function(x,rounds = 2){
 
 
 
+#' remove_ceros
+#'
+#' Function that removes rows and columns that only contain zeros from the similiarity matrices.
+#'
+#' @param x List of similarity matrices derived from the complete_matrices functions.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' remove_ceros(x)
+#' }
+remove_ceros <- function(x){
+  y <- x[[4]]
+  y <- which(rowSums(y == 0) == ncol(y))
+  list_out <- lapply(x,function(x) x[-y,-y])
+  return(list_out)
+}
 
 
