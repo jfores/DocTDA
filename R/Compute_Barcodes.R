@@ -256,7 +256,11 @@ compute_bc_round_multi <- function(x,dir_bc){
 #' compute_bc_and_save(dir_in,ir_bc,alpha_filt = 1000)
 #' }
 compute_bc_and_save <- function(dir_in,dir_out,n_alpha_filt = 1000){
-  pdb_files <- dir(dir_in,full.names = T)
+  if(length(dir_in) > 1){
+    pdb_files <- dir_in
+  }else{
+    pdb_files <- dir(dir_in,full.names = T)
+  }
   computed_barcodes <- dir(dir_out,full.names = T)
   pb <- utils::txtProgressBar(min = 0, max = length(pdb_files))
   for(i in 1:length(pdb_files)){
