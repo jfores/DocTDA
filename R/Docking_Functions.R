@@ -20,7 +20,7 @@ create_config_pdb <- function(x){
   #elements <- bio3d::elements
   #elements <- bio3d::elements
   elements <<- bio3d::elements
-  center_of_mass <- bio3d::com(pdb_readed)
+  center_of_mass <- bio3d::com(pdb_readed,use.mass=FALSE)
   x_size <- range(pdb_readed$atom$x)[2] -range(pdb_readed$atom$x)[1]
   y_size <- range(pdb_readed$atom$y)[2] -range(pdb_readed$atom$y)[1]
   z_size <- range(pdb_readed$atom$z)[2] -range(pdb_readed$atom$z)[1]
