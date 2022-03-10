@@ -326,12 +326,12 @@ get_paths_to_dock <- function(protein_test,drug_test,prot_estructures_prep,prot_
 #' create_vina_command(x,y,z,w,exhaust)
 #' }
 #'
-create_vina_command_2 <- function(x,y,z,w,exhaust = 8){
+create_vina_command_2 <- function(x,y,z,exhaust = 8){
   out_file <- z
   receptor <- substr(gsub(".*/","",x),1,10)
   ligand <- gsub(".pdbqt","",gsub(".*/","",y))
   out_file <- paste(out_file,"/",receptor,"_AND_",ligand,".pdbqt",sep="")
-  temp_pdb_file <- w
+  temp_pdb_file <- x
   print(temp_pdb_file)
   temp_log <- gsub("pdbqt","log",out_file)
   #print(temp_log)
