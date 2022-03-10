@@ -22,8 +22,11 @@ create_config_pdb <- function(x){
   elements <<- bio3d::elements
   center_of_mass <- bio3d::com(pdb_readed,use.mass=FALSE)
   x_size <- range(pdb_readed$atom$x)[order(range(pdb_readed$atom$x))][2] -range(pdb_readed$atom$x)[order(range(pdb_readed$atom$x))][1]
+  x_size <- ceiling(x_size) + 10
   y_size <- range(pdb_readed$atom$y)[order(range(pdb_readed$atom$y))][2] -range(pdb_readed$atom$y)[order(range(pdb_readed$atom$y))][1]
+  y_size <- ceiling(y_size) + 10
   z_size <- range(pdb_readed$atom$z)[order(range(pdb_readed$atom$z))][2] -range(pdb_readed$atom$z)[order(range(pdb_readed$atom$z))][1]
+  z_size <- ceiling(z_size) + 10
   print(list(center_of_mass[1],center_of_mass[2],center_of_mass[3],x_size,y_size,z_size))
   return(list(center_of_mass[1],center_of_mass[2],center_of_mass[3],x_size,y_size,z_size))
 }
