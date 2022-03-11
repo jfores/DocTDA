@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(DocTDA)
+View(bio3d::elements)
 ```
 
 Download de structures of five proteins of the Globin family derived from five different species. 

@@ -59,4 +59,28 @@ extract_multiple_alpha <- function(structures){
 
 
 
-
+#' correct_pdbqt
+#'
+#' @param x pdbqt file to correct.
+#' @param out_file out file to save.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' correct_pdbqt(x,out_file)
+#' }
+correct_pdbqt <- function(x,out_file){
+  readed_x <- readLines(x)
+  which_longer <- which(unlist(lapply(readed_x,nchar) > 79))
+  for(i in 1:length(which_longer)){
+    temp_line <- readed_x[which_longer[i]]
+    print(temp_line)
+    new_line <- paste(substr(temp_line,1,16),substr(temp_line,19,nchar(temp_line)))
+    print(new_line)
+    readed_x[which_longer[i]] <- new_line
+  }
+  writeLines(readed_x,out_file)
+  return(readed_x)
+}

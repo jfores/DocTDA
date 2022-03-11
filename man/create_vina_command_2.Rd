@@ -4,7 +4,7 @@
 \alias{create_vina_command_2}
 \title{create_vina_command_2}
 \usage{
-create_vina_command_2(x, y, z, w, exhaust = 8)
+create_vina_command_2(x, y, z, exhaust = 8)
 }
 \arguments{
 \item{x}{Path to protein pdbqt.}
@@ -13,9 +13,9 @@ create_vina_command_2(x, y, z, w, exhaust = 8)
 
 \item{z}{Output pathway.}
 
-\item{w}{Path to receptor pdb files.}
-
 \item{exhaust}{Exhaustiveness parameter for vina.}
+
+\item{w}{Path to receptor pdb files.}
 }
 \value{
 
