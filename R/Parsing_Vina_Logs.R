@@ -14,7 +14,11 @@
 parse_max_energy_vina <- function(log_file_path){
   con <- file(log_file_path)
   read_temp <- readLines(con)
-  max_bin_en <- as.numeric(strsplit(read_temp[which(grepl("kcal/mol",read_temp)) + 2]," ")[[1]][13])
+  line_temp <- strsplit(read_temp[which(grepl("kcal/mol",read_temp)) + 2],"[[:space:]]")[[1]]
+  print(line_temp)
+  line_temp <- line_temp[!line_temp == ""]
+  print(line_temp)
+  max_bin_en <- as.numeric(line_temp[2])
   close(con)
   return(max_bin_en)
 }
